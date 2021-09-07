@@ -12,7 +12,7 @@ const con = mysql.createConnection({
 exports.createThread = (req, res, next) => {
   const threadObject = JSON.parse(req.body.thread);
   delete threadObject._id;
-  con.query('INSERT INTO authors SET ?', threadObject)
+  con.query('INSERT INTO thread SET ?', threadObject)
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
 //   const thread = new Thread({

@@ -4,7 +4,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-configs');
 
-const sauceCtrl = require('../controllers/threads');
+const threadCtrl = require('../controllers/threads');
 const rateLimit = require("express-rate-limit");
 
 const reqLimiter = rateLimit({
@@ -12,11 +12,11 @@ const reqLimiter = rateLimit({
   max: 100
 });
 
-router.get('/', auth, sauceCtrl.getAllthreads);
-router.post('/', multer, sauceCtrl.createThread);
-// router.post('/', auth, reqLimiter, multer, sauceCtrl.createThread);
-router.get('/:id', auth, sauceCtrl.getOneThread);
-router.put('/:id', auth, reqLimiter, multer, sauceCtrl.modifyThread);
-router.delete('/:id', auth, reqLimiter, sauceCtrl.deleteThread);
+router.get('/', auth, threadCtrl.getAllthreads);
+router.post('/', multer, threadCtrl.createThread);
+// router.post('/', auth, reqLimiter, multer, threadCtrl.createThread);
+router.get('/:id', auth, threadCtrl.getOneThread);
+router.put('/:id', auth, reqLimiter, multer, threadCtrl.modifyThread);
+router.delete('/:id', auth, reqLimiter, threadCtrl.deleteThread);
 
 module.exports = router;

@@ -15,13 +15,6 @@ exports.createThread = (req, res, next) => {
   con.query('INSERT INTO thread SET ?', threadObject)
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
-//   const thread = new Thread({
-//     ...threadObject,
-//     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//   });
-//   thread.save()
-//     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-//     .catch(error => res.status(400).json({ error }));
 };
 
 exports.getOneThread = (req, res, next) => {
@@ -72,7 +65,7 @@ exports.deleteThread = (req, res, next) => {
 };
 
 exports.getAllThreads = (req, res, next) => {
-  Thread.find().then(
+    con.query('SELECT * FROM thread').then(
     (threads) => {
       res.status(200).json(threads);
     }

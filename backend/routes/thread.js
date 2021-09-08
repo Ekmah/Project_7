@@ -12,7 +12,7 @@ const reqLimiter = rateLimit({
   max: 100
 });
 
-router.get('/', auth, threadCtrl.getAllthreads);
+router.get('/', auth, threadCtrl.getAllThreads);
 router.post('/', multer, threadCtrl.createThread);
 // router.post('/', auth, reqLimiter, multer, threadCtrl.createThread);
 router.get('/:id', auth, threadCtrl.getOneThread);

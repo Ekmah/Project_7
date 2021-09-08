@@ -1,9 +1,15 @@
-const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 // -----------------------------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- REQUIRE ADAPTATION FROM MONGODB TO MYSQL ------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------------------------------------------
+const mysql = require('mysql');
+const con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'dactylographierais',
+  database: 'p7'
+});
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
   .then(hash => {

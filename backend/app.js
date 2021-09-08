@@ -5,6 +5,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
+
+const threadsRoutes = require('./routes/thread');
+const postsRoutes = require('./routes/post');
+const userRoutes = require('./routes/user');
+
 const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -26,6 +31,8 @@ app.use((req, res, next) => {
   });
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
+app.use('/api/threads', threadsRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;

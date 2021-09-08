@@ -10,22 +10,23 @@ const con = mysql.createConnection({
   database: 'p7'
 });
   
-exports.createThread = (req, res, next) => {
-  const threadObject = req.body.thread;
-  console.log(threadObject)
-  con.query('INSERT INTO thread SET ?', threadObject, (err, resp) => {
-    console.log(resp.insertId)
+exports.createPost = (req, res, next) => {
+  const postObject = req.body.post;
+  console.log(postObject)
+  con.query('INSERT INTO post SET ?', postObject, (err, resp) => {
     if (err){res.status(400).json({ err })}
-    else {res.status(201).json({ message: 'Objet enregistré !'})}
+    else {
+        console.log(resp.insertId);
+        res.status(201).json({ message: 'Objet enregistré !'})}
   })
 };
 
-exports.getOneThread = (req, res, next) => {
-  Thread.findOne({
+exports.getOnePost = (req, res, next) => {
+  Post.findOne({
     _id: req.params.id
   }).then(
-    (thread) => {
-      res.status(200).json(thread);
+    (post) => {
+      res.status(200).json(post);
     }
   ).catch(
     (error) => {
@@ -36,27 +37,27 @@ exports.getOneThread = (req, res, next) => {
   );
 };
 
-exports.modifyThread = (req, res, next) => {
-    const threadObject = JSON.parse(req.body.thread)
-    console.log(threadObject)
+exports.modifyPost = (req, res, next) => {
+    const postObject = JSON.parse(req.body.post)
+    console.log(postObject)
     let quer = ""
-    for (field of Object.keys(threadObject)) {
-      quer = quer.concat(`${mysql.escape(field)}=${mysql.escape(threadObject[field])}`)
+    for (field of Object.keys(postObject)) {
+      quer = quer.concat(`${mysql.escape(field)}=${mysql.escape(postObject[field])}`)
     }
     con.query(
-        `UPDATE thread SET ${quer} Where ID = ?`,
-        [threadObject.id], (err, resp) => {
+        `UPDATE post SET ${quer} Where ID = ?`,
+        [postObject.id], (err, resp) => {
           if (err){res.status(400).json({ err })}
           else {res.status(20).json({ message: 'Objet modifié !'})}
         })
 };
 
-exports.deleteThread = (req, res, next) => {
-  Thread.findOne({ _id: req.params.id })
-  .then(thread => {
-    const filename = thread.imageUrl.split('/images/')[1];
+exports.deletePost = (req, res, next) => {
+  Post.findOne({ _id: req.params.id })
+  .then(post => {
+    const filename = post.imageUrl.split('/images/')[1];
     fs.unlink(`images/${filename}`, () => {
-      Thread.deleteOne({ _id: req.params.id })
+      Post.deleteOne({ _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
         .catch(error => res.status(400).json({ error }));
     });
@@ -64,10 +65,10 @@ exports.deleteThread = (req, res, next) => {
   .catch(error => res.status(500).json({ error }));
 };
 
-exports.getAllThreads = (req, res, next) => {
-    con.query('SELECT * FROM thread').then(
-    (threads) => {
-      res.status(200).json(threads);
+exports.getAllPosts = (req, res, next) => {
+    con.query('SELECT * FROM post').then(
+    (posts) => {
+      res.status(200).json(posts);
     }
   ).catch(
     (error) => {

@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// -----------------------------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------- REQUIRE ADAPTATION FROM MONGODB TO MYSQL ------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------------------------
+
 const mysql = require('mysql');
 const con = mysql.createConnection({
   host: 'localhost',
@@ -13,21 +11,18 @@ const con = mysql.createConnection({
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
   .then(hash => {
-      const user = new User({
-          email: req.body.email,
-          password: hash
-      });
-      user.save()
-      .then(() => res.status(201).json({ message: 'Utilisateur créé!' }))
-      .catch(error => res.status(400).json({ error, message: 'Une erreure!!' }));
+    const userObject = {'username':req.body.username, 'email_adress':req.body.email_adress, 'password':hash}
+    con.query('INSERT INTO user SET ?', userObject, (err, resp) => {
+      console.log(resp.insertId)
+      if (err){res.status(400).json({ err })}
+      else {res.status(201).json({ message: 'Utilisateur créé !'})}
+    })
   })
-  .catch(error => res.status(500).json({ error }));
 };
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
-  .then(user => {
+  con.query('SELECT * FROM post WHERE email_adress=?', req.params.email_adress, (err, user) => {
     if (!user) {
-      return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+      return res.status(401).json({err});
     }
     bcrypt.compare(req.body.password, user.password)
     .then(valid => {
@@ -45,5 +40,4 @@ exports.login = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }));
   })
-  .catch(error => res.status(500).json({ error }));
 };

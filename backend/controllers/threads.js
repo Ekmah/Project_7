@@ -1,7 +1,5 @@
 const fs = require('fs');
-// -----------------------------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------- REQUIRE ADAPTATION FROM MONGODB TO MYSQL ------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------------------------
+
 const mysql = require('mysql');
 const con = mysql.createConnection({
   host: 'localhost',
@@ -21,19 +19,11 @@ exports.createThread = (req, res, next) => {
 };
 
 exports.getOneThread = (req, res, next) => {
-  Thread.findOne({
-    _id: req.params.id
-  }).then(
-    (thread) => {
-      res.status(200).json(thread);
-    }
-  ).catch(
-    (error) => {
-      res.status(404).json({
-        error: error
-      });
-    }
-  );
+  con.query('SELECT * FROM thread WHERE id=?', req.params.id, (err, resp) => {
+    console.log(resp)
+    if (err){res.status(404).json({err})}
+    else {res.status(200).json(resp)}
+  })
 };
 
 exports.modifyThread = (req, res, next) => {
@@ -52,28 +42,16 @@ exports.modifyThread = (req, res, next) => {
 };
 
 exports.deleteThread = (req, res, next) => {
-  Thread.findOne({ _id: req.params.id })
-  .then(thread => {
-    const filename = thread.imageUrl.split('/images/')[1];
-    fs.unlink(`images/${filename}`, () => {
-      Thread.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-        .catch(error => res.status(400).json({ error }));
-    });
+  con.query('DELETE FROM thread WHERE id=?', req.params.id, (err, resp) => {
+    console.log(resp)
+    if (err){res.status(400).json({err})}
+    else {res.status(200).json({ message: 'Objet supprimé !'})}
   })
-  .catch(error => res.status(500).json({ error }));
 };
 
 exports.getAllThreads = (req, res, next) => {
-    con.query('SELECT * FROM thread').then(
-    (threads) => {
-      res.status(200).json(threads);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  con.query('SELECT * FROM thread', (err, resp) => {
+    if (err){res.status(400).json({err})}
+    else {res.status(200).json(resp)}
+  })
 };

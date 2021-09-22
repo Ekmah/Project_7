@@ -14,12 +14,13 @@
 // method: 'POST',
 // body: JSON.stringify(payload)
 // })
-//---------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------//
+//--------------------------------------LOGIN WORKING------------------------------------------------//
+//---------------------------------------------------------------------------------------------------//
 payload = {
     "email_adress": "toto.toto@toto.fr",
     "password": "147896325"
 }
-console.log(payload)
 fetch(`http://localhost:4000/api/auth/login`, {
 headers: {
     'Content-Type': "application/json"
@@ -27,14 +28,19 @@ headers: {
 method: 'POST',
 body: JSON.stringify(payload)
 })
-.then(function(res){
-    const token=res
-    return token
+//---------------------------------------------------------------------------------------------------//
+//---------------------------------GET ALL THREADS WORKING-------------------------------------------//
+//---------------------------------------------------------------------------------------------------//
+.then(response => {
+    console.log(response)
+    return response.json()  
 })
-.then(function(token) {
+.then(function(res){
+    console.log(res)
+    const token=res.token
     fetch(`http://localhost:4000/api/threads/`, {
     headers: {
-        'Authorisation': token
+        'Authorization': token
     }
     })
     .then(function(res) {

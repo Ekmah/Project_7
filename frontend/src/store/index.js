@@ -1,21 +1,22 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: null,
+    token:null
   },
   mutations: {
     INSERT_TOKEN(state, payload) {
-      state.token = payload;
-    },
+      state.token = payload
+    }
   },
   actions: {
     insert_token(context, token) {
-      context.commit("INSERT_TOKEN", token);
-    },
+      context.commit('INSERT_TOKEN', token)
+    }
   },
-  modules: {},
-});
+  modules: {
+  }
+})

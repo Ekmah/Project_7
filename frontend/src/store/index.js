@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token:0
+    token:null
   },
   mutations: {
     INSERT_TOKEN(state, payload) {

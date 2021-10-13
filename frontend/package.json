@@ -12,6 +12,7 @@
   "main": "main.js",
   "dependencies": {
     "@vue/cli": "^4.5.13",
+    "axios": "^0.23.0",
     "core-js": "^3.6.5",
     "latest": "^0.2.0",
     "vue": "^2.6.14",

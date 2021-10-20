@@ -27,8 +27,8 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.getPostsofThread = (req, res, next) => {
-  con.query('SELECT * FROM post WHERE threadId=?', req.params.threadId, (err, resp) => {
-    console.log(resp)
+  con.query('SELECT * FROM post WHERE threadId=?', req.params.id, (err, resp) => {
+    console.log(req.params, resp)
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}
   })

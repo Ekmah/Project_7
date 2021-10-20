@@ -50,7 +50,7 @@ exports.deleteThread = (req, res, next) => {
 };
 
 exports.getAllThreads = (req, res, next) => {
-  con.query('SELECT * FROM thread', (err, resp) => {
+  con.query('SELECT thread.id as threadId, thread.date_creation, thread.subject, user.username, thread.creatorId FROM thread JOIN user on user.id=thread.creatorId', (err, resp) => {
     if (err){res.status(400).json({err})}
     else {res.status(200).json(resp)}
   })

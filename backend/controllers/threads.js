@@ -19,7 +19,22 @@ exports.createThread = (req, res, next) => {
 };
 
 exports.getOneThread = (req, res, next) => {
-  con.query('SELECT * FROM thread WHERE id=?', req.params.id, (err, resp) => {
+  con.query(`SELECT 
+            post.id as postId, 
+            thread.id as threadId, 
+            user.id as userId, 
+            user.username, 
+            post.content, 
+            post.media, 
+            post.is_first_post, 
+            post.answer_to, 
+            post.date_creation as postDateCreation, 
+            thread.date_creation as threadCreationDate, 
+            thread.subject 
+            FROM thread 
+            JOIN post on post.threadId = thread.id 
+            JOIN user on user.id = post.creatorId  
+            WHERE thread.id = ?`, req.params.id, (err, resp) => {
     console.log(resp)
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}

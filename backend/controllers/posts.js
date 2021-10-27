@@ -27,8 +27,23 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.getPostsofThread = (req, res, next) => {
-  con.query('SELECT * FROM post WHERE threadId=?', req.params.id, (err, resp) => {
-    console.log(req.params, resp)
+  con.query(`SELECT 
+            post.id as postId, 
+            thread.id as threadId, 
+            user.id as userId, 
+            user.username,
+            post.content, 
+            post.media, 
+            post.is_first_post, 
+            post.answer_to, 
+            post.date_creation as postDateCreation, 
+            thread.date_creation as threadCreationDate, 
+            thread.subject 
+            FROM post 
+            JOIN thread on thread.id = post.threadId 
+            JOIN user on user.id = post.creatorId 
+            WHERE post.threadId=?`, req.params.id, (err, resp) => {
+    console.log(resp)
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}
   })

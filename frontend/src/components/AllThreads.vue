@@ -2,27 +2,14 @@
     <div>
         <ul id="example-1">
             <li v-for="thread in threads" :key="thread.threadId">
-                <form @submit.prevent="onSubmit(thread.threadId)">
-                    {{ thread.threadId}}
-                    {{ thread.username}}
-                    {{ thread.subject }}
-                    {{ thread.creatorId}}
-                    {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}}
-                    <button type="submit">submit</button>
-                </form>
-            </li>
-            <li v-for="post in posts" :key="post.postId">
-                threadId: {{ post.threadId}} <br>
-                postId: {{ post.postId}} <br>
-                userId: {{ post.userId}} <br>
-                creator username: {{ post.username}} <br>
-                thread subject: {{ post.subject }} <br>
-                post media: {{ post.media }} <br>
-                post is first post: {{ post.is_first_post }} <br>
-                post answer to: {{ post.answer_to }} <br>
-                post content: {{ post.content }} <br>
-                thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
-                post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}{{ post.date_creation | moment("dddd, MMMM Do YYYY")}}
+                {{ thread.threadId}}
+                {{ thread.username}}
+                {{ thread.subject }}
+                {{ thread.creatorId}}
+                {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}}
+                <button type="button" @click="onSubmit(thread.threadId)" value="develop">See thread</button>
+                <button type="button" @click="onModify(thread.threadId)">Modify</button>
+                <button type="button" @click="onDelete(thread.threadId)">Delete</button>
             </li>
         </ul>
     </div>
@@ -36,7 +23,8 @@ export default {
         return {
             isvalid:false,
             threads: "",
-            posts: ""
+            posts: "",
+            type_of_action: ""
         }
     },
     methods: {
@@ -50,11 +38,14 @@ export default {
         },
         onSubmit(threadId){
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
-            http.get(`/threads/${threadId}`)
-            .then(response => {
-                this.posts = response.data
-            })
-        } 
+        }, 
+        onModify(threadId) {
+            this.$router.push({name: "Thread", params: {"threadId": threadId}})
+        },
+        onDelete(threadId) {
+            console.log(threadId)
+            // http.delete(`/threads/${threadId}`)
+        },
     },
     beforeMount(){
         this.getAllThreads()

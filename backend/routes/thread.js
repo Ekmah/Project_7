@@ -11,7 +11,6 @@ const reqLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100
 });
-
 router.get('/', auth, threadCtrl.getAllThreads);
 router.post('/', multer, threadCtrl.createThread);
 // router.post('/', auth, reqLimiter, multer, threadCtrl.createThread);

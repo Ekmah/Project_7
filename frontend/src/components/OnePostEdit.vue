@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul id="example-1">
-            <li :key="post.postId">
+            <li>
                 <form @submit.prevent="onSubmit(post.postId)">
                     threadId: {{ post.threadId}} <br>
                     postId: {{ post.postId}} <br>
@@ -37,7 +37,8 @@ export default {
         getOnePost(){
             http.get(`/posts/${this.$route.params.postId}`)
             .then(response => {
-                this.post = response.data
+                this.post = response.data[0]
+                console.log(this.post)
                 this.content = this.post.content
             })
         },
@@ -46,7 +47,7 @@ export default {
             this.$router.push({name: "Thread", params: {"threadId": this.post.threadId}})
         },  
     },
-    beforeMount(){
+    created(){
         this.getOnePost()
     },
 }

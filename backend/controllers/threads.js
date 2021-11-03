@@ -35,7 +35,6 @@ exports.getOneThread = (req, res, next) => {
             JOIN post on post.threadId = thread.id 
             JOIN user on user.id = post.creatorId  
             WHERE thread.id = ?`, req.params.id, (err, resp) => {
-    console.log(resp)
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}
   })

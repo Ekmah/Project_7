@@ -19,11 +19,6 @@ const routes = [
     component: () => import( '../views/Registration.vue')
   },
   {
-    path: '/thread/:threadId',
-    name: 'Thread',
-    component: () => import( '../views/Thread.vue')
-  },
-  {
     path: '/thread/edit/:threadId',
     name: 'Thread_modify',
     component: () => import( '../views/Thread_edit.vue')
@@ -32,6 +27,11 @@ const routes = [
     path: '/thread/create',
     name: 'Thread_create',
     component: () => import( '../views/Thread_create.vue')
+  },
+  {
+    path: '/thread/:threadId',
+    name: 'Thread',
+    component: () => import( '../views/Thread.vue')
   },
   {
     path: '/post/edit/:postId',

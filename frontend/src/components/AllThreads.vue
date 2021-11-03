@@ -1,6 +1,7 @@
 <template>
     <div>
         <ul id="example-1">
+            <button type="button" @click="onCreate()">Create new Thread</button>
             <li v-for="thread in threads" :key="thread.threadId">
                 {{ thread.threadId}}
                 {{ thread.username}}
@@ -36,11 +37,14 @@ export default {
                 console.log(threads)
             })
         },
+        onCreate(){
+            this.$router.push({name: "Thread_create"})
+        },
         onSubmit(threadId){
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
         }, 
         onModify(threadId) {
-            this.$router.push({name: "Thread", params: {"threadId": threadId}})
+            this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         },
         onDelete(threadId) {
             console.log(threadId)

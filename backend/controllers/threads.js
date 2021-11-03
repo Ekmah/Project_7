@@ -12,7 +12,7 @@ exports.createThread = (req, res, next) => {
   const threadObject = req.body.thread;
   console.log(threadObject)
   con.query('INSERT INTO thread SET ?', threadObject, (err, resp) => {
-    console.log(resp.insertId)
+    console.log(resp)
     if (err){res.status(400).json({ err })}
     else {res.status(201).json({ message: 'Objet enregistré !'})}
   })
@@ -42,18 +42,19 @@ exports.getOneThread = (req, res, next) => {
 };
 
 exports.modifyThread = (req, res, next) => {
-    const threadObject = JSON.parse(req.body.thread)
-    console.log(threadObject)
-    let quer = ""
-    for (field of Object.keys(threadObject)) {
-      quer = quer.concat(`${mysql.escape(field)}=${mysql.escape(threadObject[field])}`)
+  const threadObject = req.body.thread
+  let quer = ""
+  for (field of Object.keys(threadObject)) {
+    if (field!="id"){
+      quer = quer.concat(field,`=${mysql.escape(threadObject[field])} `)
     }
-    con.query(
-        `UPDATE thread SET ${quer} Where ID = ?`,
-        [threadObject.id], (err, resp) => {
-          if (err){res.status(400).json({ err })}
-          else {res.status(20).json({ message: 'Objet modifié !'})}
-        })
+  }
+  con.query(
+    `UPDATE thread SET ${quer} Where ID = ?`,
+    [threadObject.id], (err, resp) => {
+      if (err){res.status(400).json({ err })}
+      else {res.status(200).json({ message: 'Objet modifié !'})}
+    })
 };
 
 exports.deleteThread = (req, res, next) => {

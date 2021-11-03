@@ -1,23 +1,22 @@
 <template>
     <div>
         <ul id="example-1">
-            <button type="button" @click="onCreatePost()">Create new Post</button>
             <li v-for="post in posts" :key="post.postId">
+                <form @submit.prevent="onSubmit(post.threadId)">
                 threadId: {{ post.threadId}} <br>
                 postId: {{ post.postId}} <br>
                 userId: {{ post.userId}} <br>
                 creator username: {{ post.username}} <br>
-                thread subject: {{ post.subject }} <br>
+                <label for="subject">thread subject:</label> 
+                <input type="text" id="subject" name="subject" v-model="subject">
+                <button type="submit">Save Edit</button> <br>
                 post media: {{ post.media }} <br>
                 post is first post: {{ post.is_first_post }} <br>
                 post answer to: {{ post.answer_to }} <br>
                 post content: {{ post.content }} <br>
                 thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
-                post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}<br>
-                {{ post.date_creation | moment("dddd, MMMM Do YYYY")}}<br>
-                <button type="button" @click="onModifyThread(post.threadId)">Modify Thread</button>
-                <button type="button" @click="onModifyPost(post.postId)">Modify Post</button>
-                <button type="button" @click="onDeletePost(post.postId)">Delete Post</button>
+                post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}{{ post.date_creation | moment("dddd, MMMM Do YYYY")}}
+                </form>
             </li>
         </ul>
     </div>
@@ -26,11 +25,12 @@
 <script> 
 import http from "../http"
 export default {
-    name: "OneThread",
+    name: "OneThreadEdit",
     data(){
         return {
             isvalid:false,
-            posts: ""
+            posts: "",
+            subject: "",
         }
     },
     methods: {
@@ -38,21 +38,13 @@ export default {
             http.get(`/threads/${this.$route.params.threadId}`)
             .then(response => {
                 this.posts = response.data
+                this.subject = this.posts[0].subject
             })
         },
-        onModifyThread(threadId) {
-            this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
-        }, 
-        onCreatePost(){
-            this.$router.push({name: "Post_create"})
-        },
-        onModifyPost(postId) {
-            this.$router.push({name: "Post_modify", params: {"postId": postId}})
-        },
-        onDeletePost(postId) {
-            console.log(postId)
-            // http.delete(`/posts/${postId}`)
-        },
+        onSubmit(threadId){
+            http.put(`/threads/${this.$route.params.threadId}`, {"thread":{"subject": this.subject, "id":threadId}})
+            this.$router.push({name: "Thread", params: {"threadId": threadId}})
+        },  
     },
     beforeMount(){
         this.getOneThread()

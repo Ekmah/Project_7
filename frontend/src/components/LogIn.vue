@@ -31,7 +31,9 @@ export default {
             http.post("auth/login", payload)
             .then(response => {
                 let token = response.data.token
+                let id = response.data.userId
                 sessionStorage.setItem('token', token)
+                sessionStorage.setItem('id', id)
                 this.$store.commit('insert_token', token)
                 this.$router.push({name: "Home"})
             })

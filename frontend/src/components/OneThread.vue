@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul id="example-1">
-            <button type="button" @click="onCreatePost()">Create new Post</button>
+            <button type="button" @click="onCreatePost(false)">Create new Post</button>
             <li v-for="post in posts" :key="post.postId">
                 threadId: {{ post.threadId}} <br>
                 postId: {{ post.postId}} <br>
@@ -18,41 +18,66 @@
                 <button type="button" @click="onModifyThread(post.threadId)">Modify Thread</button>
                 <button type="button" @click="onModifyPost(post.postId)">Modify Post</button>
                 <button type="button" @click="onDeletePost(post.postId)">Delete Post</button>
+                <button type="button" @click="onCreatePost(post.postId)">Answer to post</button>
+                <div v-if="post_creation">
+                    <div v-if="is_answer == post.postId">
+                        <OnePostCreate :type=is_answer @creation_done="updatePostCreation"></OnePostCreate>
+                    </div>
+                </div>
+            </li>
+            <li v-if="post_creation">
+                <div v-if="is_answer === false">
+                    <OnePostCreate type="new_post" @creation_done="updatePostCreation"></OnePostCreate>
+                </div>
             </li>
         </ul>
     </div>
 </template> 
 
 <script> 
+import OnePostCreate from '@/components/OnePostCreate.vue'
 import http from "../http"
 export default {
     name: "OneThread",
+    components: {
+        OnePostCreate
+    },
     data(){
         return {
             isvalid:false,
-            posts: ""
+            posts: "",
+            post_creation: false,
+            is_answer: false,
         }
     },
     methods: {
         getOneThread(){
             http.get(`/threads/${this.$route.params.threadId}`)
             .then(response => {
+                console.log("resp", response.data)
                 this.posts = response.data
             })
         },
         onModifyThread(threadId) {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         }, 
-        onCreatePost(){
-            this.$router.push({name: "Post_create"})
+        onCreatePost(isAnswer){
+            this.post_creation = true
+            this.is_answer = isAnswer
         },
         onModifyPost(postId) {
             this.$router.push({name: "Post_modify", params: {"postId": postId}})
         },
         onDeletePost(postId) {
             console.log(postId)
-            // http.delete(`/posts/${postId}`)
+            http.delete(`/posts/${postId}`)
+            .then(() => {
+            this.getOneThread()})
         },
+        updatePostCreation(child_post_creation) {
+            this.post_creation = child_post_creation
+            this.getOneThread()
+        }
     },
     beforeMount(){
         this.getOneThread()

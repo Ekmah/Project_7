@@ -34,7 +34,6 @@ export default {
             .then(response => {
                 let threads = response.data
                 this.threads = threads
-                console.log(threads)
             })
         },
         onCreate(){
@@ -47,8 +46,9 @@ export default {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         },
         onDelete(threadId) {
-            console.log(threadId)
-            // http.delete(`/threads/${threadId}`)
+            http.delete(`/threads/${threadId}`)
+            .then(() => {
+            this.getAllThread()})
         },
     },
     beforeMount(){

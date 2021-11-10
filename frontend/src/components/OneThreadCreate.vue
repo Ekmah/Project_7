@@ -4,6 +4,8 @@
             <li>
                 <label for="subject">thread subject:</label> 
                 <input type="text" id="subject" name="subject" v-model="subject">
+                <label for="content">Post content:</label> 
+                <textarea id="content" name="content" v-model="content"></textarea>
                 <button type="button" @click="onCreateThread()">Create Thread</button>
             </li>
         </ul>
@@ -19,6 +21,7 @@ export default {
         return {
             isvalid:false,
             subject: "",
+            content: "",
         }
     },
     methods: {
@@ -33,11 +36,23 @@ export default {
                 }
             }
             http.post(`/threads/`, payload)
+            .then(response => {
+                let payload_post = {
+                "post":
+                {
+                    "creatorId":sessionStorage.getItem('id'), 
+                    "content": this.content, 
+                    "date_creation": date,
+                    "threadId": response.data["resp"].insertId,
+                    "is_first_post": true
+                }
+            }
+            http.post(`/posts/`, payload_post)
+            
             this.$router.push({name: "Home"})
+            })
+            
         },
-    },
-    beforeMount(){
-        this.getOneThread()
     },
 }
 </script>

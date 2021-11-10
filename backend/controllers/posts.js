@@ -13,7 +13,7 @@ exports.createPost = (req, res, next) => {
   console.log(postObject)
   con.query('INSERT INTO post SET ?', postObject, (err, resp) => {
     console.log(resp)
-    if (err){res.status(400).json({ err })}
+    if (err){res.status(500).json({ err })}
     else {res.status(201).json({ message: 'Objet enregistré !'})}
   })
 };

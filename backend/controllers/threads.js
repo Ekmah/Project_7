@@ -10,11 +10,9 @@ const con = mysql.createConnection({
   
 exports.createThread = (req, res, next) => {
   const threadObject = req.body.thread;
-  console.log(threadObject)
   con.query('INSERT INTO thread SET ?', threadObject, (err, resp) => {
-    console.log(resp)
     if (err){res.status(400).json({ err })}
-    else {res.status(201).json({ message: 'Objet enregistré !'})}
+    else {res.status(201).json({resp})}
   })
 };
 

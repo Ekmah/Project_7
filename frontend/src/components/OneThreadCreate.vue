@@ -6,7 +6,7 @@
                 <input type="text" id="subject" name="subject" v-model="subject">
                 <label for="content">Post content:</label> 
                 <textarea id="content" name="content" v-model="content"></textarea>
-                <button type="button" @click="onCreateThread()">Create Thread</button>
+                <button type="button" @click="CreateThread()">Create Thread</button>
             </li>
         </ul>
     </div>
@@ -25,7 +25,12 @@ export default {
         }
     },
     methods: {
-        onCreateThread(){
+        isConnected() {
+            if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
+                this.$router.push({name: "Login"})
+            }
+        },
+        CreateThread(){
             let date = moment().format('YYYY-MM-DD h:mm:ss');
             let payload = {
                 "thread":
@@ -54,6 +59,9 @@ export default {
             
         },
     },
+    beforeMount(){
+        this.isConnected()
+    }
 }
 </script>
 

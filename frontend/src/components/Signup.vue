@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="Submit">
             <label for="username_signup">Username:</label>
             <input id="username_signup" v-model="username" type="text"><br>
             <label for="email_adress_signup">Email adress:</label>
@@ -25,7 +25,7 @@ export default {
         }
     },
     methods: {
-        onSubmit(){
+        Submit(){
             let payload = {
                 "username": this.username,
                 "email_adress": this.email_adress,

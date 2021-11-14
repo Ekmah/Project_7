@@ -2,7 +2,7 @@
     <div>
         <ul id="example-1">
             <li v-for="post in posts" :key="post.postId">
-                <form @submit.prevent="onSubmit(post.threadId)">
+                <form @submit.prevent="Submit(post.threadId)">
                 threadId: {{ post.threadId}} <br>
                 postId: {{ post.postId}} <br>
                 userId: {{ post.userId}} <br>
@@ -34,6 +34,11 @@ export default {
         }
     },
     methods: {
+        isConnected() {
+            if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
+                this.$router.push({name: "Login"})
+            }
+        },
         getOneThread(){
             http.get(`/threads/${this.$route.params.threadId}`)
             .then(response => {
@@ -41,12 +46,13 @@ export default {
                 this.subject = this.posts[0].subject
             })
         },
-        onSubmit(threadId){
+        Submit(threadId){
             http.put(`/threads/${this.$route.params.threadId}`, {"thread":{"subject": this.subject, "id":threadId}})
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
         },  
     },
     beforeMount(){
+        this.isConnected()
         this.getOneThread()
     },
 }

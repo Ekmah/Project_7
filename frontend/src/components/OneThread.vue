@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul id="example-1">
-            <button type="button" @click="onCreatePost(false)">Create new Post</button>
+            <button type="button" @click="CreatePost(false)">Create new Post</button>
             <li v-for="post in posts" :key="post.postId">
                 threadId: {{ post.threadId}} <br>
                 postId: {{ post.postId}} <br>
@@ -15,10 +15,10 @@
                 thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
                 post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}<br>
                 {{ post.date_creation | moment("dddd, MMMM Do YYYY")}}<br>
-                <button type="button" @click="onModifyThread(post.threadId)">Modify Thread</button>
-                <button type="button" @click="onModifyPost(post.postId)">Modify Post</button>
-                <button type="button" @click="onDeletePost(post.postId)">Delete Post</button>
-                <button type="button" @click="onCreatePost(post.postId)">Answer to post</button>
+                <button type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                <button type="button" @click="ModifyPost(post.postId)">Modify Post</button>
+                <button type="button" @click="DeletePost(post.postId)">Delete Post</button>
+                <button type="button" @click="CreatePost(post.postId)">Answer to post</button>
                 <div v-if="post_creation">
                     <div v-if="is_answer == post.postId">
                         <OnePostCreate :type=is_answer @creation_done="updatePostCreation"></OnePostCreate>
@@ -51,6 +51,11 @@ export default {
         }
     },
     methods: {
+        isConnected() {
+            if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
+                this.$router.push({name: "Login"})
+            }
+        },
         getOneThread(){
             http.get(`/threads/${this.$route.params.threadId}`)
             .then(response => {
@@ -58,17 +63,17 @@ export default {
                 this.posts = response.data
             })
         },
-        onModifyThread(threadId) {
+        ModifyThread(threadId) {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
-        }, 
-        onCreatePost(isAnswer){
+        },
+        CreatePost(isAnswer){
             this.post_creation = true
             this.is_answer = isAnswer
         },
-        onModifyPost(postId) {
+        ModifyPost(postId) {
             this.$router.push({name: "Post_modify", params: {"postId": postId}})
         },
-        onDeletePost(postId) {
+        DeletePost(postId) {
             console.log(postId)
             http.delete(`/posts/${postId}`)
             .then(() => {
@@ -80,6 +85,7 @@ export default {
         }
     },
     beforeMount(){
+        this.isConnected()
         this.getOneThread()
     },
 }

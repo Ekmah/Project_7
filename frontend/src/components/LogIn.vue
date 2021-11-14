@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="Submit">
             <label for="email_adress">Email adress:</label>
             <input id="email_adress" v-model="email_adress" type="email"><br>
             <label for="password">Password:</label>
@@ -23,7 +23,7 @@ export default {
         }
     },
     methods: {
-        onSubmit(){
+        Submit(){
             let payload = {
                 "email_adress": this.email_adress,
                 "password": this.password

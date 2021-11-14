@@ -2,7 +2,7 @@
     <div>
         <ul id="example-1">
             <li>
-                <form @submit.prevent="onSubmit(post.postId)">
+                <form @submit.prevent="Submit(post.postId)">
                     threadId: {{ post.threadId}} <br>
                     postId: {{ post.postId}} <br>
                     userId: {{ post.userId}} <br>
@@ -34,6 +34,11 @@ export default {
         }
     },
     methods: {
+        isConnected() {
+            if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
+                this.$router.push({name: "Login"})
+            }
+        },
         getOnePost(){
             http.get(`/posts/${this.$route.params.postId}`)
             .then(response => {
@@ -42,10 +47,13 @@ export default {
                 this.content = this.post.content
             })
         },
-        onSubmit(postId){
+        Submit(postId){
             http.put(`/posts/${this.$route.params.postId}`, {"post":{"content": this.content, "id":postId}})
             this.$router.push({name: "Thread", params: {"threadId": this.post.threadId}})
         },  
+    },
+    beforeMount(){
+        this.isConnected()
     },
     created(){
         this.getOnePost()

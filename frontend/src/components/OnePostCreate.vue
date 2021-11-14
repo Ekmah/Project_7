@@ -4,7 +4,7 @@
             <li>
                 <label for="content">Post content:</label> 
                 <textarea id="content" name="content" v-model="content"></textarea>
-                <button type="button" @click="onCreatePost">Create Post</button>
+                <button type="button" @click="CreatePost">Create Post</button>
             </li>
         </ul>
     </div>
@@ -24,7 +24,12 @@ export default {
         }
     },
     methods: {
-        onCreatePost(){
+        isConnected() {
+            if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
+                this.$router.push({name: "Login"})
+            }
+        },
+        CreatePost(){
             let isFirstPost = false
             let isAnswer = false
             console.log(this.type)
@@ -50,6 +55,9 @@ export default {
             
         },
     },
+    beforeMount(){
+        this.isConnected()
+    }
 }
 </script>
 

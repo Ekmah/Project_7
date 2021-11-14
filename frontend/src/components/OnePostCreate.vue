@@ -4,7 +4,7 @@
             <li>
                 <label for="content">Post content:</label> 
                 <textarea id="content" name="content" v-model="content"></textarea>
-                <button type="button" @click="CreatePost">Create Post</button>
+                <button class="btn btn-success" type="button" @click="CreatePost">Create Post</button>
             </li>
         </ul>
     </div>

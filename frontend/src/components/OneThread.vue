@@ -1,8 +1,10 @@
 <template>
     <div>
         <ul id="example-1">
-            <button type="button" @click="CreatePost(false)">Create new Post</button>
             <li v-for="post in posts" :key="post.postId">
+                <div v-if="post.is_first_post">
+                    <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                </div>
                 threadId: {{ post.threadId}} <br>
                 postId: {{ post.postId}} <br>
                 userId: {{ post.userId}} <br>
@@ -15,16 +17,17 @@
                 thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
                 post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}<br>
                 {{ post.date_creation | moment("dddd, MMMM Do YYYY")}}<br>
-                <button type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
-                <button type="button" @click="ModifyPost(post.postId)">Modify Post</button>
-                <button type="button" @click="DeletePost(post.postId)">Delete Post</button>
-                <button type="button" @click="CreatePost(post.postId)">Answer to post</button>
+                
+                <button class="btn btn-secondary" type="button" @click="ModifyPost(post.postId)">Modify Post</button>
+                <button class="btn btn-danger" type="button" @click="DeletePost(post.postId)">Delete Post</button>
+                <button class="btn btn-success" type="button" @click="CreatePost(post.postId)">Answer to post</button>
                 <div v-if="post_creation">
                     <div v-if="is_answer == post.postId">
                         <OnePostCreate :type=is_answer @creation_done="updatePostCreation"></OnePostCreate>
                     </div>
                 </div>
             </li>
+            <button class="btn btn-success" type="button" @click="CreatePost(false)">Create new Post</button>
             <li v-if="post_creation">
                 <div v-if="is_answer === false">
                     <OnePostCreate type="new_post" @creation_done="updatePostCreation"></OnePostCreate>

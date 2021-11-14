@@ -8,7 +8,6 @@ const http = axios.create({
 http.interceptors.request.use(function (config)
 {
   const token = sessionStorage.getItem('token');
-  console.log(token)
   config.headers.Authorization = token ? `${token}` : 'abc';
   return config;
 });

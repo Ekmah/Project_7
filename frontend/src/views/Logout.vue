@@ -7,7 +7,7 @@
 <script>
 
 export default {
-  name: 'Log out',
+  name: 'LogOut',
   methods: {
     isConnected() {
       if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {

@@ -1,16 +1,19 @@
 <template>
     <div>
         <ul id="example-1">
-            <button type="button" @click="Create()">Create new Thread</button>
-            <li v-for="thread in threads" :key="thread.threadId">
-                {{ thread.threadId}}
-                {{ thread.username}}
-                {{ thread.subject }}
-                {{ thread.creatorId}}
-                {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}}
-                <button type="button" @click="Submit(thread.threadId)" value="develop">See thread</button>
-                <button type="button" @click="Modify(thread.threadId)">Modify</button>
-                <button type="button" @click="Delete(thread.threadId)">Delete</button>
+            <button class="btn btn-success" type="button" @click="Create()">Create new Thread</button>
+            <li class="thread" v-for="thread in threads" :key="thread.threadId">
+                <div class="thread-body btn btn-secondary">
+                    <a class="" type="button" @click="Submit(thread.threadId)" value="develop">
+                        <div>{{ thread.subject }}</div>
+                        <!-- {{ thread.threadId}} | {{ thread.creatorId}} -->
+                        <small style="color:gray">created on {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}} by {{ thread.username}}</small>
+                    </a>
+                    <div class="butn-group">
+                        <button class="btn btn-secondary" type="button" @click="Modify(thread.threadId)">Modify</button>
+                        <button class="btn btn-danger" type="button" @click="Delete(thread.threadId)">Delete</button>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -47,7 +50,7 @@ export default {
         Submit(threadId){
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
         }, 
-        onModify(threadId) {
+        Modify(threadId) {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         },
         Delete(threadId) {
@@ -64,5 +67,22 @@ export default {
 </script>
 
 <style>
-
+    .butn-group {
+        display:flex;
+    }
+    .thread-body {
+        width:800px;
+        text-align: left; 
+        background-color: lightgreen; 
+        color:black;
+        flex-direction: column;
+    }
+    ul {
+        list-style-type:none;
+    }
+    .thread-body:hover{
+        background-color: #42b983;
+        color: black;
+        border-color: white;
+    }
 </style>

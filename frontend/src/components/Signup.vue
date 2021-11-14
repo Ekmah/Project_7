@@ -1,13 +1,15 @@
 <template>
     <div>
         <form @submit.prevent="Submit">
-            <label for="username_signup">Username:</label>
-            <input id="username_signup" v-model="username" type="text"><br>
-            <label for="email_adress_signup">Email adress:</label>
-            <input id="email_adress_signup" v-model="email_adress" type="email"><br>
-            <label for="password_signup">Password:</label>
-            <input id="password_signup" v-model="password" type="password"><br>
-            <button type="submit">submit</button>
+            <div class="form-group">
+                <label for="username_signup">Username:</label>
+                <input class="form-control" id="username_signup" v-model="username" type="text"><br>
+                <label for="email_adress_signup">Email adress:</label>
+                <input class="form-control" id="email_adress_signup" v-model="email_adress" type="email"><br>
+                <label for="password_signup">Password:</label>
+                <input class="form-control" id="password_signup" v-model="password" type="password"><br>
+                <button class="btn btn-success" type="submit">submit</button>
+            </div>
         </form>
     </div>
 </template>

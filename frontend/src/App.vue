@@ -9,6 +9,8 @@
   </div>
 </template>
 
+<script>
+</script>
 
 <style lang="scss">
 #app {
@@ -18,7 +20,12 @@
   text-align: center;
   color: #2c3e50;
 }
-
+body {
+  background-color: white !important;
+}
+.btn {
+  margin:5px;
+}
 #nav {
   padding: 30px;
 
@@ -31,4 +38,5 @@
     }
   }
 }
+@import'~bootstrap/dist/css/bootstrap.css'
 </style>

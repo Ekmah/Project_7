@@ -1,11 +1,13 @@
 <template>
     <div>
         <form @submit.prevent="Submit">
-            <label for="email_adress">Email adress:</label>
-            <input id="email_adress" v-model="email_adress" type="email"><br>
-            <label for="password">Password:</label>
-            <input id="password" v-model="password" type="password"><br>
-            <button type="submit">submit</button>
+            <div class="form-group">
+                <label for="email_adress">Email adress:</label>
+                <input class="form-control" id="email_adress" v-model="email_adress" type="email"><br>
+                <label for="password">Password:</label>
+                <input class="form-control" id="password" v-model="password" type="password"><br>
+                <button class="btn btn-success" type="submit">submit</button>
+            </div>
         </form>
         <!-- <button @click.prevent="aaa" :class="{zoom:isvalid}" class="">zefuyz</button> -->
     </div>

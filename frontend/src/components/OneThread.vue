@@ -3,59 +3,49 @@
         <ul id="example-1">
             <li v-for="post in posts" :key="post.postId">
                 <div v-if="post.is_first_post" class="thread-header">
-                    <h1>{{ post.subject }}</h1>
-                    <small class="small">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</small>
-                    <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                    <div class="thread-header-top">
+                        <h1>{{ post.subject }}</h1>
+                        <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                    </div>
+                    <span class="small small-header">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</span>
                 </div>
+                
                 <div class="post">
-                    <div class="header">
-                        <div class="header-writing">
-                            <span v-if="post.answer_to" >answer to post #{{ post.answer_to }} </span>
-                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}
+                    <div class="body">
+                        <div class="user">{{ post.username}}</div>
+                        <div class="content">
+                            <small class="small">#{{post.postId}} | <span v-if="post.answer_to" >answer to post #{{ post.answer_to }} </span>
+                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY, h:mm:ss a")}}</small>
+                            <hr style="margin: 0px 0px 1rem 0px;">
+                            <div v-if="post_edit">
+                                <div v-if="post_id == post.postId">
+                                    <OnePostEdit :post=post @edit_done="updatePostEdit"></OnePostEdit>
+                                </div>
+                                <div v-else class="text">
+                                    {{ post.content }}
+                                </div>
+                            </div>
+                            <div v-else class="text">
+                                {{ post.content }}
+                            </div>
                         </div>
+                    </div>
+                    <div class="butn-group">
+                        <button class="btn btn-success answer" type="button" @click="CreatePost(true, post.postId)">Answer to post</button>
                         <div v-if="role=='modo' || post.userId == connected_user_id" class="butn-group">
                             <button class="btn btn-secondary" type="button" @click="ModifyPost(post.postId)">Modify Post</button>
                             <button class="btn btn-danger" type="button" @click="DeletePost(post.postId)">Delete Post</button>
                         </div>
                     </div>
-                    <div class="body">
-                        <div class="user">{{ post.username}}</div>
-                        <div class="content">
-                            <div v-if="post_edit">
-                                <div v-if="post_id == post.postId">
-                                    <OnePostEdit :post=post @edit_done="updatePostEdit"></OnePostEdit>
-                                </div>
-                                <div v-else>
-                                    {{ post.content }}
-                                </div>
-                            </div>
-                            <div v-else>
-                                {{ post.content }}
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-success answer" type="button" @click="CreatePost(true, post.postId)">Answer to post</button>
                     <div v-if="post_creation">
                         <div v-if="post_id == post.postId && is_answer">
                             <OnePostCreate :type=is_answer @creation_done="updatePostCreation"></OnePostCreate>
                         </div>
                     </div>
+                    
                 </div>
-                <!-- threadId: {{ post.threadId}} <br>
-                postId: {{ post.postId}} <br>
-                userId: {{ post.userId}} <br>
-                creator username: {{ post.username}} <br>
-                thread subject: {{ post.subject }} <br>
-                post media: {{ post.media }} <br>
-                post is first post: {{ post.is_first_post }} <br>
-                post answer to: {{ post.answer_to }} <br>
-                post content: {{ post.content }} <br>
-                thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
-                post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}<br> -->
-               
-                
             </li>
-            <button class="btn btn-success" type="button" @click="CreatePost(false, post.postId)">Create new Post</button>
+            <button class="btn btn-success" type="button" @click="CreatePost(false)">Create new Post</button>
             <li v-if="post_creation">
                 <div v-if="is_answer === false">
                     <OnePostCreate type="new_post" @creation_done="updatePostCreation"></OnePostCreate>
@@ -96,7 +86,6 @@ export default {
         getOneThread(){
             http.get(`/threads/${this.$route.params.threadId}`)
             .then(response => {
-                console.log("resp", response.data)
                 this.posts = response.data
                 this.role = sessionStorage.getItem('role')
                 this.connected_user_id = sessionStorage.getItem('id')
@@ -105,7 +94,7 @@ export default {
         ModifyThread(threadId) {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         },
-        CreatePost(isAnswer, postId){
+        CreatePost(isAnswer, postId=null){
             this.post_creation = true
             this.is_answer = isAnswer
             this.post_id = postId
@@ -138,8 +127,25 @@ export default {
 </script>
 
 <style>
-.thread-hader{
-    text-align: left !important; 
+ul {
+    padding-inline-start:0px;
+    padding:10px;
+}
+.thread-header{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding:10px;
+}
+.thread-header-top{
+    display:flex;
+    align-items: self-start;
+}
+.small{
+    color:gray;
+}
+.text{
+    padding:0px 5px;
 }
 .post{
     text-align: left !important; 
@@ -149,7 +155,6 @@ export default {
     display:flex;
     margin:5px;
     border:5px solid rgb(160, 255, 160);
-    border-top-width: 0px;;
 }
 .header{
     padding:5px;
@@ -167,7 +172,7 @@ export default {
     display:flex
 }
 .user{
-    padding:5px;
+    padding:5px 10px;
     text-align: left !important; 
     background-color: lightgray !important; 
     width:20%;

@@ -30,7 +30,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   con.query('SELECT type.id as typeId, user.id, user.username, user.email_adress, user.password, type.name FROM user JOIN type on type.userId=user.id WHERE email_adress=?', req.body.email_adress, (err, user) => {
     if (!user) {
-      return res.status(401).json({err});
+      return res.status(401).json({err}); 
     }
     bcrypt.compare(req.body.password, user[0].password)
     .then(valid => {

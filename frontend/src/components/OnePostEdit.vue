@@ -15,6 +15,7 @@ export default {
         return {
             isvalid:false,
             content: "",
+            postId: ""
         }
     },
     methods: {
@@ -25,12 +26,14 @@ export default {
         },
         getOnePost(){
             this.content = this.post.content
+            this.postId = this.post.postId
         },
         Cancel(){
             this.$emit('edit_done', false)
         },
         Submit(){
-            http.put(`/posts/${this.post.id}`, {"post":{"content": this.content, "id":this.post.id}})
+            console.log("id?",this.postId)
+            http.put(`/posts/${this.postId}`, {"post":{"content": this.content, "id":this.postId}})
             .then(() => {
                 this.$emit('edit_done', false) 
             })

@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
     <OnePostEdit></OnePostEdit>
   </div>
 </template>

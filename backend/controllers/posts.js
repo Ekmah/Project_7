@@ -10,7 +10,6 @@ const con = mysql.createConnection({
 
 exports.createPost = (req, res, next) => {
   const postObject = req.body.post;
-  console.log(postObject)
   con.query('INSERT INTO post SET ?', postObject, (err, resp) => {
     console.log(resp)
     if (err){res.status(500).json({ err })}
@@ -74,10 +73,10 @@ exports.modifyPost = (req, res, next) => {
       }
     }
     con.query(
-        `UPDATE post SET ${quer} Where ID = ?`,
+        `UPDATE post SET ${quer} Where id = ?`,
         [postObject.id], (err, resp) => {
           if (err){res.status(400).json({ err })}
-          else {res.status(20).json({ message: 'Objet modifié !'})}
+          else {res.status(201).json({ message: 'Objet modifié !'})}
         })
 };
 
@@ -95,3 +94,30 @@ exports.getAllPosts = (req, res, next) => {
     else {res.status(200).json(resp)}
   })
 };
+
+exports.getAllNewPosts = (req, res, next) => {
+  con.query('SELECT thread.id as threadId, thread.date_creation, thread.subject, user.username, thread.creatorId FROM thread JOIN user on user.id=thread.creatorId', (err, resp) => {
+    if (err){res.status(400).json({err})}
+    else {res.status(200).json(resp)}
+  })
+};
+// `SELECT * FROM post ORDER BY date_creation DESC LIMIT 0, 10`
+
+// SELECT 
+//             post.id as postId, 
+//             thread.id as threadId, 
+//             user.id as userId, 
+//             user.username,
+//             post.content, 
+//             post.media, 
+//             post.is_first_post, 
+//             post.answer_to, 
+//             post.date_creation as postDateCreation, 
+//             thread.date_creation as threadCreationDate, 
+//             thread.subject 
+//             FROM post 
+//             JOIN thread on thread.id = post.threadId 
+//             JOIN user on user.id = post.creatorId 
+//             ORDER BY date_creation 
+//             DESC 
+//             LIMIT 0, 10

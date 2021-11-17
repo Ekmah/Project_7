@@ -50,7 +50,7 @@ exports.modifyThread = (req, res, next) => {
     `UPDATE thread SET ${quer} Where ID = ?`,
     [threadObject.id], (err, resp) => {
       if (err){res.status(400).json({ err })}
-      else {res.status(200).json({ message: 'Objet modifié !'})}
+      else {res.status(201).json({ message: 'Objet modifié !'})}
     })
 };
 

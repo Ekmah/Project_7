@@ -3,15 +3,50 @@
         <ul id="example-1">
             <button class="btn btn-success" type="button" @click="Create()">Create new Thread</button>
             <li class="thread" v-for="thread in threads" :key="thread.threadId">
-                <div class="thread-body btn btn-secondary">
-                    <a class="a_button" type="button" @click="Submit(thread.threadId)" value="develop">
-                        <div>{{ thread.subject }}</div>
-                        <!-- {{ thread.threadId}} | {{ thread.creatorId}} -->
-                        <small style="color:gray">created on {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}} by {{ thread.username}}</small>
-                    </a>
-                    <div v-if="role=='modo' || thread.userId == connected_user_id" class="butn-group">
+                <div class="thread-body col-12 col-md-8">
+                    <div class="thread-body-header">
+                        <a class="a_button" type="button" @click="Submit(thread.threadId)" value="develop">
+                            <h4>{{ thread.subject }}</h4>
+                        </a>
+                            <!-- {{ thread.threadId}} | {{ thread.creatorId}} -->
+                        <small style="color:gray">
+                            created on {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}} by {{ thread.username}}
+                        </small>
+                    </div>
+                    <div v-if="role=='modo' || thread.creatorId == connected_user_id" class="butn-group">
                         <button class="btn btn-secondary" type="button" @click="Modify(thread.threadId)">Modify</button>
                         <button class="btn btn-danger" type="button" @click="Delete(thread.threadId)">Delete</button>
+                    </div>
+                </div>
+            </li>
+            <li v-for="post in posts" :key="post.postId">
+                <div v-if="post.is_first_post" class="thread-header">
+                    <h1>{{ post.subject }}</h1>
+                    <small class="small">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</small>
+                    <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                </div>
+                <div class="post">
+                    <div class="header">
+                        <div class="header-writing">
+                            <span v-if="post.answer_to" >answer to post #{{ post.answer_to }} </span>
+                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="user">{{ post.username}}</div>
+                        <div class="content">
+                            <div v-if="post_edit">
+                                <div v-if="post_id == post.postId">
+                                    <OnePostEdit :post=post @edit_done="updatePostEdit"></OnePostEdit>
+                                </div>
+                                <div v-else>
+                                    {{ post.content }}
+                                </div>
+                            </div>
+                            <div v-else>
+                                {{ post.content }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -39,14 +74,19 @@ export default {
                 this.$router.push({name: "Login"})
             }
         },
-        getAllThreads(){
+        getAllInfos(){
             http.get("/threads/")
             .then(response => {
                 let threads = response.data
                 this.threads = threads
                 this.role = sessionStorage.getItem('role')
                 this.connected_user_id = sessionStorage.getItem('id')
+                http.get("/posts/new/")
+                .then(response => {
+                    this.posts = response.data
+                })
             })
+            
         },
         Create(){
             this.$router.push({name: "Thread_create"})
@@ -60,37 +100,45 @@ export default {
         Delete(threadId) {
             http.delete(`/threads/${threadId}`)
             .then(() => {
-            this.getAllThread()})
+            this.getAllInfos()})
         },
     },
     beforeMount(){
         this.isConnected()
-        this.getAllThreads()
+        this.getAllInfos()
     },
 }
 </script>
 
 <style>
-    .butn-group {
+    .thread{
         display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
     }
     .thread-body {
-        width:800px !important;
-        text-align: left !important; 
-        background-color: rgb(160, 255, 160) !important; 
-        color:black !important;
-        flex-direction: column !important;
+        text-align: left ; 
+        background-color: rgb(160, 255, 160) ; 
+        color:black ;
+        display:flex ;
+        flex-wrap: wrap;
+        justify-content:space-between;
+        padding:5px;
+        margin:5px;
+        border: 1px solid gray;
+    }
+    .thread-body-header {
+        display:flex ;
+        flex-wrap: wrap;
+        flex-direction: column ;
     }
     .a_button {
         text-decoration: none;
-        width:80%;
+        color:black;
     }
     ul {
         list-style-type:none;
-    }
-    .thread-body:hover{
-        background-color: #6bffbc !important;
-        color: black !important;
-        border-color: white !important;
     }
 </style>

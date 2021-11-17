@@ -5,6 +5,7 @@
       <router-link to="/login">Login/SignUp</router-link> |
       <router-link to="/logout">Log Out</router-link>
     </div>
+    <img class="logo" alt="Vue logo" src="../src/assets/logo.png">
     <router-view/>
   </div>
 </template>
@@ -21,7 +22,19 @@
   color: #2c3e50;
 }
 body {
-  background-color: white !important;
+  background-color: rgb(255, 255, 255) !important;
+}
+img {
+  object-fit: cover;
+  
+}
+.logo{
+  width: 80%;
+  max-width: 400px;
+}
+.butn-group {
+  display:flex;
+  flex-wrap: wrap;
 }
 .btn {
   margin:5px;

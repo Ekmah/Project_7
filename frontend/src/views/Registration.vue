@@ -1,6 +1,5 @@
 <template>
   <div class="registraton">
-    <img alt="Vue logo" src="../assets/logo.png">
     <div style="display:flex;padding:5px;justify-content: center;max-height:340px">
       <div style="margin:5px;">
         <h3>Log in:</h3>

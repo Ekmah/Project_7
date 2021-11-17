@@ -1,24 +1,8 @@
 <template>
     <div>
-        <ul id="example-1">
-            <li>
-                <form @submit.prevent="Submit(post.postId)">
-                    threadId: {{ post.threadId}} <br>
-                    postId: {{ post.postId}} <br>
-                    userId: {{ post.userId}} <br>
-                    creator username: {{ post.username}} <br>
-                    thread subject: {{ post.subject }}
-                    
-                    post media: {{ post.media }} <br>
-                    post is first post: {{ post.is_first_post }} <br>
-                    post answer to: {{ post.answer_to }} <br>
-                    <input type="text" id="content" name="content" v-model="content">
-                    <button type="submit">Save Edit</button> <br>
-                    thread creation date: {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}} <br>
-                    post creation date: {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}{{ post.date_creation | moment("dddd, MMMM Do YYYY")}}
-                </form>
-            </li>
-        </ul>
+        <textarea id="content" name="content" class="form-control" v-model="content"></textarea>
+        <button class="btn btn-success" type="button" @click="Submit">Save Edit</button>
+        <button class="btn btn-warning" type="button" @click="Cancel">Cancel</button> <br>
     </div>
 </template> 
 
@@ -26,10 +10,10 @@
 import http from "../http"
 export default {
     name: "OnePostEdit",
+    props: ["post"],
     data(){
         return {
             isvalid:false,
-            post: "",
             content: "",
         }
     },
@@ -40,16 +24,16 @@ export default {
             }
         },
         getOnePost(){
-            http.get(`/posts/${this.$route.params.postId}`)
-            .then(response => {
-                this.post = response.data[0]
-                console.log(this.post)
-                this.content = this.post.content
-            })
+            this.content = this.post.content
         },
-        Submit(postId){
-            http.put(`/posts/${this.$route.params.postId}`, {"post":{"content": this.content, "id":postId}})
-            this.$router.push({name: "Thread", params: {"threadId": this.post.threadId}})
+        Cancel(){
+            this.$emit('edit_done', false)
+        },
+        Submit(){
+            http.put(`/posts/${this.post.id}`, {"post":{"content": this.content, "id":this.post.id}})
+            .then(() => {
+                this.$emit('edit_done', false) 
+            })
         },  
     },
     beforeMount(){

@@ -3,8 +3,9 @@
         <ul id="example-1">
             <li>
                 <label for="content">Post content:</label> 
-                <textarea id="content" name="content" v-model="content"></textarea>
+                <textarea class="form-control" id="content" name="content" v-model="content"></textarea>
                 <button class="btn btn-success" type="button" @click="CreatePost">Create Post</button>
+                <button class="btn btn-warning" type="button" @click="Cancel">Cancel</button>
             </li>
         </ul>
     </div>
@@ -28,6 +29,9 @@ export default {
             if (!sessionStorage.getItem('token') && !sessionStorage.getItem('id')) {
                 this.$router.push({name: "Login"})
             }
+        },
+        Cancel(){
+            this.$emit('creation_done', false)
         },
         CreatePost(){
             let isFirstPost = false

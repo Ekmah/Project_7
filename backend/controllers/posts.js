@@ -11,7 +11,7 @@ const con = mysql.createConnection({
 exports.createPost = (req, res, next) => {
   const postObject = req.body.post;
   con.query('INSERT INTO post SET ?', postObject, (err, resp) => {
-    console.log(resp)
+    // console.log(resp)
     if (err){res.status(500).json({ err })}
     else {res.status(201).json({ message: 'Objet enregistré !'})}
   })
@@ -34,7 +34,7 @@ exports.getOnePost = (req, res, next) => {
             JOIN thread on thread.id = post.threadId 
             JOIN user on user.id = post.creatorId 
             WHERE post.id=?`, req.params.id, (err, resp) => {
-    console.log("", resp)
+    // console.log("", resp)
     if (err){res.status(500).json({err})}
     else {res.status(200).json(resp)}
   })
@@ -57,34 +57,47 @@ exports.getPostsofThread = (req, res, next) => {
             JOIN thread on thread.id = post.threadId 
             JOIN user on user.id = post.creatorId 
             WHERE post.threadId=?`, req.params.id, (err, resp) => {
-    console.log(resp)
+    // console.log(resp)
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}
   })
 };
 
 exports.modifyPost = (req, res, next) => {
-    const postObject = req.body.post
-    console.log(postObject)
-    let quer = ""
-    for (field of Object.keys(postObject)) {
-      if (field!="id"){
-        quer = quer.concat(field,`=${mysql.escape(postObject[field])} `)
+  con.query('SELECT * FROM post WHERE id=?', req.params.postId, (err, resp) => {
+    console.log("post:", resp)
+    if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
+      const postObject = req.body.post
+      let quer = ""
+      for (field of Object.keys(postObject)) {
+        if (field!="id"){
+          quer = quer.concat(field,`=${mysql.escape(postObject[field])} `)
+        }
       }
+      con.query(
+          `UPDATE post SET ${quer} Where id = ?`,
+          req.params.postId, (err, resp) => {
+            if (err){res.status(400).json({ err })}
+            else {res.status(201).json({ message: 'Objet modifié !'})}
+          })
+    } else {
+      res.status(400).json({message: "You are neither the creator or the moderator of this post."})
     }
-    con.query(
-        `UPDATE post SET ${quer} Where id = ?`,
-        [postObject.id], (err, resp) => {
-          if (err){res.status(400).json({ err })}
-          else {res.status(201).json({ message: 'Objet modifié !'})}
-        })
+  })
 };
 
 exports.deletePost = (req, res, next) => {
-  con.query('DELETE FROM post WHERE id=?', req.params.id, (err, resp) => {
-    console.log(resp)
-    if (err){res.status(400).json({err})}
-    else {res.status(200).json({ message: 'Objet supprimé !'})}
+  con.query('SELECT * FROM post WHERE id=?', req.params.postId, (err, resp) => {
+    console.log("post:", resp)
+    if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
+      con.query('DELETE FROM post WHERE id=?', req.params.postId, (err, resp) => {
+        console.log(resp)
+        if (err){res.status(400).json({err})}
+        else {res.status(200).json({ message: 'Objet supprimé !'})}
+      })
+    } else {
+      res.status(400).json({message: "You are neither the creator or the moderator of this post."})
+    }
   })
 };
 
@@ -96,7 +109,8 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 exports.getAllNewPosts = (req, res, next) => {
-  con.query('SELECT thread.id as threadId, thread.date_creation, thread.subject, user.username, thread.creatorId FROM thread JOIN user on user.id=thread.creatorId', (err, resp) => {
+  con.query(`SELECT * FROM post ORDER BY date_creation DESC LIMIT 0, 10`, (err, resp) => {
+    // console.log(resp)
     if (err){res.status(400).json({err})}
     else {res.status(200).json(resp)}
   })

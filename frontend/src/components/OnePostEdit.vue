@@ -33,7 +33,7 @@ export default {
         },
         Submit(){
             console.log("id?",this.postId)
-            http.put(`/posts/${this.postId}`, {"post":{"content": this.content, "id":this.postId}})
+            http.put(`/posts/${this.postId}/${sessionStorage.getItem('id')}/${sessionStorage.getItem('role')}`, {"post":{"content": this.content, "id":this.postId}})
             .then(() => {
                 this.$emit('edit_done', false) 
             })

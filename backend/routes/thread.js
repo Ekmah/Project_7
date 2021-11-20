@@ -15,7 +15,7 @@ router.get('/', auth, threadCtrl.getAllThreads);
 router.post('/', auth, multer, threadCtrl.createThread);
 // router.post('/', auth, reqLimiter, multer, threadCtrl.createThread);
 router.get('/:id', auth, threadCtrl.getOneThread);
-router.put('/:id', auth, reqLimiter, multer, threadCtrl.modifyThread);
-router.delete('/:id', auth, reqLimiter, threadCtrl.deleteThread);
+router.put('/:threadId/:userId/:role', auth, reqLimiter, multer, threadCtrl.modifyThread);
+router.delete('/:threadId/:userId/:role', auth, reqLimiter, threadCtrl.deleteThread);
 
 module.exports = router;

@@ -20,7 +20,8 @@
                 </div>
             </li>
             <li v-for="post in posts" :key="post.postId">
-                <div v-if="post.is_first_post" class="thread-header">
+                {{post}}<br>
+                <!-- <div v-if="post.is_first_post" class="thread-header">
                     <h1>{{ post.subject }}</h1>
                     <small class="small">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</small>
                     <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </li>
         </ul>
     </div>
@@ -98,9 +99,9 @@ export default {
             this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
         },
         Delete(threadId) {
-            http.delete(`/threads/${threadId}`)
+            http.delete(`/threads/${threadId}/${this.connected_user_id}/${this.role}`)
             .then(() => {
-            this.getAllInfos()})
+                this.getAllInfos()})
         },
     },
     beforeMount(){

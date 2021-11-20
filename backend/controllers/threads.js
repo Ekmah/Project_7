@@ -32,7 +32,7 @@ exports.getOneThread = (req, res, next) => {
             FROM thread 
             JOIN post on post.threadId = thread.id 
             JOIN user on user.id = post.creatorId  
-            WHERE thread.id = ?`, req.params.id, (err, resp) => {
+            WHERE thread.id = ? ORDER BY post.date_creation`, req.params.id, (err, resp) => {
     if (err){res.status(404).json({err})}
     else {res.status(200).json(resp)}
   })
@@ -55,15 +55,22 @@ exports.modifyThread = (req, res, next) => {
 };
 
 exports.deleteThread = (req, res, next) => {
-  con.query('DELETE FROM thread WHERE id=?', req.params.id, (err, resp) => {
-    console.log(resp)
-    if (err){res.status(400).json({err})}
-    else {res.status(200).json({ message: 'Objet supprimé !'})}
+  con.query('SELECT * FROM thread WHERE id=?', req.params.threadId, (err, resp) => {
+    console.log("thread:", resp)
+    if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
+      con.query('DELETE FROM thread WHERE id=?', req.params.threadId, (err, resp) => {
+        console.log(resp)
+        if (err){res.status(400).json({err})}
+        else {res.status(200).json({ message: 'Objet supprimé !'})}
+      })
+    } else {
+      res.status(400).json({message: "You are neither the creator or the moderator of this thread."})
+    }
   })
 };
 
 exports.getAllThreads = (req, res, next) => {
-  con.query('SELECT thread.id as threadId, thread.date_creation, thread.subject, user.username, thread.creatorId FROM thread JOIN user on user.id=thread.creatorId', (err, resp) => {
+  con.query('SELECT thread.id as threadId, thread.date_creation, thread.subject, user.username, thread.creatorId FROM thread JOIN user on user.id=thread.creatorId ORDER BY thread.date_creation DESC', (err, resp) => {
     if (err){res.status(400).json({err})}
     else {res.status(200).json(resp)}
   })

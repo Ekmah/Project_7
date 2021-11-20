@@ -9,7 +9,6 @@
                     </div>
                     <span class="small small-header">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</span>
                 </div>
-                
                 <div class="post">
                     <div class="body">
                         <div class="user">{{ post.username}}</div>
@@ -106,7 +105,7 @@ export default {
         },
         DeletePost(postId) {
             console.log(postId)
-            http.delete(`/posts/${postId}`)
+            http.delete(`/posts/${postId}/${this.connected_user_id}/${this.role}`)
             .then(() => {
             this.getOneThread()})
         },

@@ -10,11 +10,11 @@ http.interceptors.request.use(function (config)
   const token = sessionStorage.getItem('token');
   config.headers.Authorization = token ? `${token}` : 'abc';
   console.log("method", config.method)
-  if (config.method == 'delete' || config.method == 'put') {
+  if (config.method == 'put'){
     const role = sessionStorage.getItem('role');
     config.data['role'] = role;
   }
-  if (config.method != 'get') {
+  else if (config.method != 'get' && config.method != 'delete') {
     config.data['userId'] = sessionStorage.getItem('id');
   }
   

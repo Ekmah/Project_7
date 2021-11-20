@@ -47,7 +47,7 @@ export default {
             })
         },
         Submit(threadId){
-            http.put(`/threads/${this.$route.params.threadId}`, {"thread":{"subject": this.subject, "id":threadId}})
+            http.put(`/threads/${this.$route.params.threadId}/${sessionStorage.getItem('id')}/${sessionStorage.getItem('role')}`, {"thread":{"subject": this.subject, "id":threadId}})
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
         },  
     },

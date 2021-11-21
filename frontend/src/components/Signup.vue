@@ -37,7 +37,10 @@ export default {
             .then(response => {
                 let token = response.data.token
                 sessionStorage.setItem('token', token)
+                sessionStorage.setItem('id', response.data.userId)
+                sessionStorage.setItem('role', response.data.role)
                 this.$store.commit('insert_token', token)
+                this.$router.push({name: "Home"})
             })
         }
     }

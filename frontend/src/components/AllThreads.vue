@@ -2,6 +2,26 @@
     <div>
         <ul id="example-1">
             <button class="btn btn-success" type="button" @click="Create()">Create new Thread</button>
+            <h2>The 10 latest posts:</h2>
+            <li class="post_home">
+                <div class="post-body col-12" v-for="post in posts" :key="post.postId">
+                    <div class="inner-post">
+                        <div v-if="post.media != '' || post.media != null">
+                            <img class="image" :src="post.media" alt="image du message" >
+                        </div>
+                        <div class="thread-body-header">
+                            <a class="a_button a_post" type="button" @click="Submit(post.threadId)" value="develop">
+                                {{ post.subject }}
+                            </a>
+                            <div class="text">{{post.content}}</div>
+                            <small style="color:gray">
+                                created on {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}} by {{ post.username}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <h2>All threads:</h2>
             <li class="thread" v-for="thread in threads" :key="thread.threadId">
                 <div class="thread-body col-12 col-md-8">
                     <div class="thread-body-header">
@@ -15,38 +35,7 @@
                     </div>
                 </div>
             </li>
-            <li v-for="post in posts" :key="post.postId">
-                {{post}}<br>
-                <!-- <div v-if="post.is_first_post" class="thread-header">
-                    <h1>{{ post.subject }}</h1>
-                    <small class="small">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</small>
-                    <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
-                </div>
-                <div class="post">
-                    <div class="header">
-                        <div class="header-writing">
-                            <span v-if="post.answer_to" >answer to post #{{ post.answer_to }} </span>
-                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY")}}
-                        </div>
-                    </div>
-                    <div class="body">
-                        <div class="user">{{ post.username}}</div>
-                        <div class="content">
-                            <div v-if="post_edit">
-                                <div v-if="post_id == post.postId">
-                                    <OnePostEdit :post=post @edit_done="updatePostEdit"></OnePostEdit>
-                                </div>
-                                <div v-else>
-                                    {{ post.content }}
-                                </div>
-                            </div>
-                            <div v-else>
-                                {{ post.content }}
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </li>
+            
         </ul>
     </div>
 </template> 
@@ -105,7 +94,20 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        
+        margin:5px;
+    }
+    .post_home{
+        display:flex;
+        flex-wrap: wrap;
+        margin:5px;
+    }
+    .inner-post{
+        display:flex;
+    }
+    .image {
+        width:50px;
+        height:50px;
+        object-fit: cover;
     }
     .thread-body {
         text-align: left ; 
@@ -115,9 +117,20 @@ export default {
         flex-wrap: wrap;
         justify-content:space-between;
         padding:5px;
+        border: 1px solid gray;
+    }
+    .text{
+        text-overflow: ellipsis;
+    }
+    .post-body {
+        text-align: left ; 
+        background-color: rgb(160, 255, 160) ; 
+        color:black ;
+        padding:5px;
         margin:5px;
         border: 1px solid gray;
     }
+    
     .thread-body-header {
         display:flex ;
         flex-wrap: wrap;
@@ -126,8 +139,38 @@ export default {
     .a_button {
         text-decoration: none;
         color:black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     ul {
         list-style-type:none;
+        padding:unset !important;
+    }
+    
+    h4 {
+        text-overflow: ellipsis;
+    }
+    .a_post{
+        width:100%;
+        font-size: x-large;
+    }
+    @media (min-width: 540px) {
+        .post-body{
+            width:48% !important;
+            flex: 0 0 auto !important;
+        }
+    }
+    @media (min-width: 768px) {
+        .post-body{
+            width:30% !important;
+            flex: 0 0 auto !important;
+        }
+    }
+    @media (min-width:1021px) {
+        .post-body{
+            width:19% !important;
+            flex: 0 0 auto !important;
+        }
     }
 </style>

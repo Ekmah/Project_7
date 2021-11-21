@@ -1,7 +1,7 @@
 <template>
     <div>
         <textarea id="content" name="content" class="form-control" v-model="content"></textarea>
-        <input type="file" id="avatar" class="btn btn-primary" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
+        <input type="file" id="avatar" class="btn" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
         <button class="btn btn-success" type="button" @click="Submit">Save Edit</button>
         <button class="btn btn-warning" type="button" @click="Cancel">Cancel</button> <br>
     </div>

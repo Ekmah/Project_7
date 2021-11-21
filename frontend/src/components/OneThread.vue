@@ -7,7 +7,7 @@
                         <div v-if="thread_edit">
                             <OneThreadEdit :thread=post @edit_done="updateThreadEdit"></OneThreadEdit>
                         </div>
-                        <div v-else class="text">
+                        <div v-else class="text_post">
                             <h1>{{ post.subject }}</h1>
                         </div>
                         <div v-if="role=='modo' || post.threadcreatorId == connected_user_id" class="butn-group">
@@ -28,11 +28,11 @@
                                 <div v-if="post_id == post.postId">
                                     <OnePostEdit :post=post @edit_done="updatePostEdit"></OnePostEdit>
                                 </div>
-                                <div v-else class="text">
+                                <div v-else class="text_post">
                                     {{ post.content }}
                                 </div>
                             </div>
-                            <div v-else class="text">
+                            <div v-else class="text_post">
                                 {{ post.content }}
                             </div>
                             <img class="" :src="post.media" alt="image du message" v-if="post.media !== ''">
@@ -166,7 +166,7 @@ ul {
 .small{
     color:gray;
 }
-.text{
+.text_post{
     padding:0px 5px;
 }
 .post{

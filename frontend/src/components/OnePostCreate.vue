@@ -4,7 +4,7 @@
             <div class="content_create">
                 <span v-if="postId" >answer to post #{{ postId }} </span>
                 <textarea class="form-control text_area" id="content" name="content" v-model="content"></textarea>
-                <input type="file" id="avatar" class="btn btn-primary" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
+                <input type="file" id="avatar" class="btn" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
             </div>
         </div>
         <div class="butn-group">

@@ -3,7 +3,15 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login/SignUp</router-link> |
-      <router-link to="/logout">Log Out</router-link>
+      <router-link to="/logout">Log Out</router-link> | 
+      <div class="dropdown">
+        <a class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          {{}}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item red" href="#">Delete your account</a></li>
+        </ul>
+      </div>
     </div>
     <img class="logo" alt="Vue logo" src="../src/assets/logo.png">
     <router-view/>
@@ -35,6 +43,12 @@ img {
 .butn-group {
   display:flex;
   flex-wrap: wrap;
+}
+.red{
+  color:red !important;
+}
+.dropdown {
+  width:10px;
 }
 .btn {
   margin:5px;

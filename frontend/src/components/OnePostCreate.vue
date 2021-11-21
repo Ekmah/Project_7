@@ -3,8 +3,8 @@
         <div class="body_create">
             <div class="content_create">
                 <span v-if="postId" >answer to post #{{ postId }} </span>
-                <textarea class="form-control" id="content" name="content" v-model="content"></textarea>
-                
+                <textarea class="form-control text_area" id="content" name="content" v-model="content"></textarea>
+                <input type="file" id="avatar" class="btn btn-primary" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
             </div>
         </div>
         <div class="butn-group">
@@ -24,6 +24,7 @@ export default {
         return {
             isvalid:false,
             content: "",
+            media: "",
         }
     },
     methods: {
@@ -35,28 +36,27 @@ export default {
         Cancel(){
             this.$emit('creation_done', false)
         },
+        selectedFile(event) {
+            this.media = event.target.files[0]
+        },
         CreatePost(){
             let isFirstPost = false
             let isAnswer = false
-            console.log(this.type)
             if (this.postId) {
                 isFirstPost = false, isAnswer = parseInt(this.postId)
             } else {
                 isAnswer = false
             }
             let date = moment().format('YYYY-MM-DD h:mm:ss');
-            let payload = {
-                "post":
-                {
-                    "creatorId":sessionStorage.getItem('id'), 
-                    "content": this.content, 
-                    "date_creation": date,
-                    "threadId": this.$route.params.threadId
-                }
-            }
-            if(isFirstPost) payload.post["is_first_post"] = true
-            if(isAnswer) payload.post["answer_to"] = isAnswer
-            http.post(`/posts/`, payload)
+            const formData = new FormData()
+            formData.set("creatorId", sessionStorage.getItem('id'))
+            formData.set("content", this.content)
+            formData.set("date_creation", date)
+            formData.set("threadId", this.$route.params.threadId)
+            formData.set("image", this.media)
+            if(isFirstPost) formData.set("is_first_post", true)
+            if(isAnswer) formData.set("answer_to", isAnswer)
+            http.post(`/posts/`, formData)
             .then(() => {
                 this.$emit('creation_done', false)
             })
@@ -70,7 +70,9 @@ export default {
 </script>
 
 <style>
-
+.text_area{
+    height:250px;
+}
 ul {
     padding-inline-start:0px;
     padding:10px;

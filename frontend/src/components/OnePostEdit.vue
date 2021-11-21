@@ -1,6 +1,7 @@
 <template>
     <div>
         <textarea id="content" name="content" class="form-control" v-model="content"></textarea>
+        <input type="file" id="avatar" class="btn btn-primary" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
         <button class="btn btn-success" type="button" @click="Submit">Save Edit</button>
         <button class="btn btn-warning" type="button" @click="Cancel">Cancel</button> <br>
     </div>
@@ -15,7 +16,8 @@ export default {
         return {
             isvalid:false,
             content: "",
-            postId: ""
+            postId: "",
+            media: ""
         }
     },
     methods: {
@@ -31,9 +33,18 @@ export default {
         Cancel(){
             this.$emit('edit_done', false)
         },
+        selectedFile(event) {
+            console.log(this.media)
+            this.media = event.target.files[0]
+            console.log(this.media)
+        },
         Submit(){
             console.log("id?",this.postId)
-            http.put(`/posts/${this.postId}/${sessionStorage.getItem('id')}/${sessionStorage.getItem('role')}`, {"post":{"content": this.content, "id":this.postId}})
+            const formData = new FormData()
+            formData.set("content", this.content)
+            formData.set("image", this.media)
+            formData.set("id", this.postId)
+            http.put(`/posts/${this.postId}/${sessionStorage.getItem('id')}/${sessionStorage.getItem('role')}`, formData)
             .then(() => {
                 this.$emit('edit_done', false) 
             })

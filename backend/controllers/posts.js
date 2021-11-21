@@ -9,7 +9,9 @@ const con = mysql.createConnection({
 });
 
 exports.createPost = (req, res, next) => {
-  const postObject = req.body.post;
+  const postObject = req.body;
+  postObject["media"] = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  console.log(postObject)
   con.query('INSERT INTO post SET ?', postObject, (err, resp) => {
     // console.log(resp)
     if (err){res.status(500).json({ err })}
@@ -65,24 +67,39 @@ exports.getPostsofThread = (req, res, next) => {
 
 exports.modifyPost = (req, res, next) => {
   con.query('SELECT * FROM post WHERE id=?', req.params.postId, (err, resp) => {
-    console.log("post:", resp)
     if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
-      const postObject = req.body.post
-      let quer = ""
-      for (field of Object.keys(postObject)) {
-        if (field!="id"){
-          quer = quer.concat(field,`=${mysql.escape(postObject[field])} `)
-        }
+      const postObject = req.body 
+      console.log(req.file) 
+      const filename = resp[0].media.split('/images/')[1];
+      if (req.file) {
+        const filename = resp[0].media.split('/images/')[1];
+        postObject["media"] = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        fs.unlink(`images/${filename}`, () =>{
+          let quer = ""
+          let inc = 0
+          let final_range = Object.keys(postObject).length
+          for (field of Object.keys(postObject)) {
+            inc += 1
+            if (field!="id"){
+              if (inc == final_range) {
+                quer = quer.concat(field,`=${mysql.escape(postObject[field])} `)
+              } else {
+                quer = quer.concat(field,`=${mysql.escape(postObject[field])}, `)
+              }
+            }
+          }
+          console.log(quer, resp[0])
+          con.query(
+            `UPDATE post SET ${quer} Where id = ?`,
+            req.params.postId, (err, resp) => {
+              if (err){res.status(400).json({ err })}
+              else {res.status(201).json({ message: 'Objet modifié !'})}
+            })
+        })
       }
-      con.query(
-          `UPDATE post SET ${quer} Where id = ?`,
-          req.params.postId, (err, resp) => {
-            if (err){res.status(400).json({ err })}
-            else {res.status(201).json({ message: 'Objet modifié !'})}
-          })
     } else {
-      res.status(400).json({message: "You are neither the creator or the moderator of this post."})
-    }
+        res.status(400).json({message: "You are neither the creator or the moderator of this post."})
+      }
   })
 };
 
@@ -90,10 +107,13 @@ exports.deletePost = (req, res, next) => {
   con.query('SELECT * FROM post WHERE id=?', req.params.postId, (err, resp) => {
     console.log("post:", resp)
     if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
-      con.query('DELETE FROM post WHERE id=?', req.params.postId, (err, resp) => {
-        console.log(resp)
-        if (err){res.status(400).json({err})}
-        else {res.status(200).json({ message: 'Objet supprimé !'})}
+      const filename = resp[0].media.split('/images/')[1];
+      fs.unlink(`images/${filename}`, () =>{
+        con.query('DELETE FROM post WHERE id=?', req.params.postId, (err, resp) => {
+          console.log(resp)
+          if (err){res.status(400).json({err})}
+          else {res.status(200).json({ message: 'Objet supprimé !'})}
+        })
       })
     } else {
       res.status(400).json({message: "You are neither the creator or the moderator of this post."})

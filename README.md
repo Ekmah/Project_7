@@ -1,4 +1,4 @@
-## Project setup IN BOTH FOLDER
+## Project setup to do IN EACH FOLDER
 ```
 npm install
 ```

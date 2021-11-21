@@ -6,10 +6,10 @@
             <li class="post_home">
                 <div class="post-body col-12" v-for="post in posts" :key="post.postId">
                     <div class="inner-post">
-                        <div v-if="post.media != '' || post.media != null">
+                        <div v-if="post.media">
                             <img class="image" :src="post.media" alt="image du message" >
                         </div>
-                        <div class="thread-body-header">
+                        <div class="post-body-content">
                             <a class="a_button a_post" type="button" @click="Submit(post.threadId)" value="develop">
                                 {{ post.subject }}
                             </a>
@@ -120,9 +120,13 @@ export default {
         border: 1px solid gray;
     }
     .text{
+        width:100%;
         text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
     .post-body {
+        max-height:110px;
         text-align: left ; 
         background-color: rgb(160, 255, 160) ; 
         color:black ;
@@ -130,7 +134,12 @@ export default {
         margin:5px;
         border: 1px solid gray;
     }
-    
+    .post-body-content {
+        display:flex ;
+        flex-wrap: wrap;
+        flex-direction: column ;
+        max-width:80%;
+    }
     .thread-body-header {
         display:flex ;
         flex-wrap: wrap;
@@ -139,7 +148,6 @@ export default {
     .a_button {
         text-decoration: none;
         color:black;
-        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -154,6 +162,9 @@ export default {
     .a_post{
         width:100%;
         font-size: x-large;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
     @media (min-width: 540px) {
         .post-body{

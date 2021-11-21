@@ -46,7 +46,7 @@
                     </div>
                     <div v-if="post_creation">
                         <div v-if="post_id == post.postId && is_answer">
-                            <OnePostCreate :type=is_answer @creation_done="updatePostCreation"></OnePostCreate>
+                            <OnePostCreate :postId=post_id @creation_done="updatePostCreation"></OnePostCreate>
                         </div>
                     </div>
                     
@@ -55,7 +55,7 @@
             <button class="btn btn-success" type="button" @click="CreatePost(false)">Create new Post</button>
             <li v-if="post_creation">
                 <div v-if="is_answer === false">
-                    <OnePostCreate type="new_post" @creation_done="updatePostCreation"></OnePostCreate>
+                    <OnePostCreate :postId=false @creation_done="updatePostCreation"></OnePostCreate>
                 </div>
             </li>
         </ul>

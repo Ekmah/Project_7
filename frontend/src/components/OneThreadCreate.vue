@@ -1,14 +1,22 @@
 <template>
-    <div>
-        <ul id="example-1">
-            <li>
-                <label for="subject">thread subject:</label> 
-                <input type="text" id="subject" name="subject" v-model="subject">
-                <label for="content">Post content:</label> 
-                <textarea id="content" name="content" v-model="content"></textarea>
-                <button type="button" @click="CreateThread()">Create Thread</button>
-            </li>
-        </ul>
+    <div class="post_create">
+        <div class="body_create">
+            <div>
+                <label for="subject">Subject of the thread:</label> 
+                <div class="content_create">
+                    <input class="form-control col-12 col-md-8 col-lg-6" type="text" id="subject" name="subject" v-model="subject">
+                </div>
+            </div>
+            <div>
+                <label for="subject">Content of your initial post:</label> 
+                <div class="content_create">
+                    <textarea class="form-control col-12 text_area" id="content" name="content" v-model="content"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="butn-group">
+            <button class="btn btn-success" type="button" @click="CreateThread()">Create Thread</button>
+        </div>
     </div>
 </template> 
 
@@ -66,5 +74,31 @@ export default {
 </script>
 
 <style>
-
+.text_area{
+    height:300px;
+}
+.small{
+    color:gray;
+}
+.text{
+    padding:0px 5px;
+}
+.post_create {
+    background-color: rgb(160, 255, 160) !important; 
+    margin:5px;
+    border:5px solid rgb(160, 255, 160);
+}
+.body_create{
+    display:flex;
+    flex-direction: column;
+}
+.content_create{
+    padding:5px;
+    text-align: left !important; 
+    background-color: rgb(160, 255, 160) !important; 
+    width:100%;
+}
+label{
+    margin-left: 10px;
+}
 </style>

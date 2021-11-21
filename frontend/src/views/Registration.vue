@@ -1,5 +1,6 @@
 <template>
-  <div class="registraton">
+  <div class="registration">
+    <Nav></Nav>
     <div style="display:flex;padding:5px;justify-content: center;max-height:340px">
       <div style="margin:5px;">
         <h3>Log in:</h3>
@@ -22,12 +23,13 @@
 // @ is an alias to /src
 import SignUp from '@/components/Signup.vue'
 import LogIn from '@/components/LogIn.vue'
-
+import Nav from '@/components/Nav.vue'
 export default {
   name: 'Home',
   components: {
     LogIn,
-    SignUp
+    SignUp,
+    Nav
   }
 }
 </script>

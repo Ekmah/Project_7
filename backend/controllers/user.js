@@ -54,3 +54,29 @@ exports.login = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
   })
 };
+exports.getuser = (req, res, next) => {
+  con.query(`SELECT * FROM user WHERE id = ?`, req.params.id, (err, resp) => {
+    console.log(resp)
+    if (err){res.status(404).json({err})}
+    else {res.status(200).json(resp)}
+  })
+};
+exports.deleteUser = (req, res, next) => {
+  con.query('SELECT * FROM user WHERE id=?', req.params.userId, (err, resp) => {
+    console.log("user:", resp)
+    if (req.params.userId == resp[0].id) {
+      con.query('UPDATE thread SET creatorId=15 WHERE creatorId=?', req.params.userId, (err, resp) => {
+        con.query('UPDATE post SET creatorId=15 WHERE creatorId=?', req.params.userId, (err, resp) => {
+          con.query('DELETE FROM user WHERE id=?', req.params.userId, (err, resp) => {
+            console.log(resp)
+            if (err){res.status(400).json({err})}
+            else {res.status(200).json({ message: 'Objet supprimé !'})}
+          })
+        })
+      })
+      
+    } else {
+      res.status(400).json({message: "You are not this user."})
+    }
+  })
+};

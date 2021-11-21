@@ -13,10 +13,6 @@
                             created on {{ thread.date_creation | moment("dddd, MMMM Do YYYY")}} by {{ thread.username}}
                         </small>
                     </div>
-                    <div v-if="role=='modo' || thread.creatorId == connected_user_id" class="butn-group">
-                        <button class="btn btn-secondary" type="button" @click="Modify(thread.threadId)">Modify</button>
-                        <button class="btn btn-danger" type="button" @click="Delete(thread.threadId)">Delete</button>
-                    </div>
                 </div>
             </li>
             <li v-for="post in posts" :key="post.postId">
@@ -94,14 +90,6 @@ export default {
         },
         Submit(threadId){
             this.$router.push({name: "Thread", params: {"threadId": threadId}})
-        }, 
-        Modify(threadId) {
-            this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
-        },
-        Delete(threadId) {
-            http.delete(`/threads/${threadId}/${this.connected_user_id}/${this.role}`)
-            .then(() => {
-                this.getAllInfos()})
         },
     },
     beforeMount(){

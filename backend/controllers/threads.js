@@ -28,7 +28,8 @@ exports.getOneThread = (req, res, next) => {
             post.answer_to, 
             post.date_creation as postDateCreation, 
             thread.date_creation as threadCreationDate, 
-            thread.subject 
+            thread.subject, 
+            thread.creatorId as threadcreatorId
             FROM thread 
             JOIN post on post.threadId = thread.id 
             JOIN user on user.id = post.creatorId  
@@ -39,19 +40,26 @@ exports.getOneThread = (req, res, next) => {
 };
 
 exports.modifyThread = (req, res, next) => {
-  const threadObject = req.body.thread
-  let quer = ""
-  for (field of Object.keys(threadObject)) {
-    if (field!="id"){
-      quer = quer.concat(field,`=${mysql.escape(threadObject[field])} `)
+  con.query('SELECT * FROM thread WHERE id=?', req.params.threadId, (err, resp) => {
+    if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
+      const threadObject = req.body.thread
+      let quer = ""
+      for (field of Object.keys(threadObject)) {
+        if (field!="id"){
+          quer = quer.concat(field,`=${mysql.escape(threadObject[field])} `)
+        }
+      }
+      console.log(quer, threadObject, req.params.threadId)
+      con.query(
+        `UPDATE thread SET ${quer} Where ID = ?`,
+        req.params.threadId, (err, resp) => {
+          if (err){res.status(400).json({ err })}
+          else {res.status(201).json({ message: 'Objet modifié !'})}
+        })
+    } else {
+      res.status(400).json({message: "You are neither the creator or the moderator of this post."})
     }
-  }
-  con.query(
-    `UPDATE thread SET ${quer} Where ID = ?`,
-    [threadObject.id], (err, resp) => {
-      if (err){res.status(400).json({ err })}
-      else {res.status(201).json({ message: 'Objet modifié !'})}
-    })
+  })
 };
 
 exports.deleteThread = (req, res, next) => {

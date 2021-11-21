@@ -4,8 +4,16 @@
             <li v-for="post in posts" :key="post.postId">
                 <div v-if="post.is_first_post" class="thread-header">
                     <div class="thread-header-top">
-                        <h1>{{ post.subject }}</h1>
-                        <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                        <div v-if="thread_edit">
+                            <OneThreadEdit :thread=post @edit_done="updateThreadEdit"></OneThreadEdit>
+                        </div>
+                        <div v-else class="text">
+                            <h1>{{ post.subject }}</h1>
+                        </div>
+                        <div v-if="role=='modo' || post.threadcreatorId == connected_user_id" class="butn-group">
+                            <button class="btn btn-secondary" type="button" @click="ModifyThread(post.threadId)">Modify Thread</button>
+                            <button class="btn btn-danger" type="button" @click="DeleteThread(post.threadId)">Delete Thread</button>
+                        </div>
                     </div>
                     <span class="small small-header">created the {{ post.threadCreationDate | moment("dddd, MMMM Do YYYY")}}</span>
                 </div>
@@ -57,12 +65,14 @@
 <script> 
 import OnePostCreate from '@/components/OnePostCreate.vue'
 import OnePostEdit from '@/components/OnePostEdit.vue'
+import OneThreadEdit from '@/components/OneThreadEdit.vue'
 import http from "../http"
 export default {
     name: "OneThread",
     components: {
         OnePostCreate,
-        OnePostEdit
+        OnePostEdit,
+        OneThreadEdit
     },
     data(){
         return {
@@ -70,6 +80,7 @@ export default {
             posts: "",
             post_creation: false,
             post_edit:false,
+            thread_edit:false,
             is_answer: false,
             post_id: "",
             role: "",
@@ -90,9 +101,6 @@ export default {
                 this.connected_user_id = sessionStorage.getItem('id')
             })
         },
-        ModifyThread(threadId) {
-            this.$router.push({name: "Thread_modify", params: {"threadId": threadId}})
-        },
         CreatePost(isAnswer, postId=null){
             this.post_creation = true
             this.is_answer = isAnswer
@@ -109,12 +117,26 @@ export default {
             .then(() => {
             this.getOneThread()})
         },
+        ModifyThread(threadId) {
+            this.thread_edit = true
+            this.thread_id = threadId
+        },
+        DeleteThread(threadId) {
+            http.delete(`/threads/${threadId}/${this.connected_user_id}/${this.role}`)
+            .then(() => {
+                this.$router.push({name: "Home"})
+            })
+        },
         updatePostCreation(child_post_creation) {
             this.post_creation = child_post_creation
             this.getOneThread()
         },
         updatePostEdit(child_post_edit) {
             this.post_edit = child_post_edit
+            this.getOneThread()
+        },
+        updateThreadEdit(child_thread_edit) {
+            this.thread_edit = child_thread_edit
             this.getOneThread()
         }
     },

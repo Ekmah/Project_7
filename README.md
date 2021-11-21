@@ -2,6 +2,7 @@
 ```
 npm install
 ```
+### Follow env-example in backend folder.
 
 ### Launch frontend in frontend folder
 ```
@@ -13,4 +14,3 @@ npm run serve
 nodemon server
 ```
 
-### Follow env-example in backend folder.

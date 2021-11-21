@@ -40,27 +40,28 @@ export default {
             this.media = event.target.files[0]
         },
         CreatePost(){
-            let isFirstPost = false
-            let isAnswer = false
-            if (this.postId) {
-                isFirstPost = false, isAnswer = parseInt(this.postId)
-            } else {
-                isAnswer = false
+            if (this.content !="") {
+                let isFirstPost = false
+                let isAnswer = false
+                if (this.postId) {
+                    isFirstPost = false, isAnswer = parseInt(this.postId)
+                } else {
+                    isAnswer = false
+                }
+                let date = moment().format('YYYY-MM-DD h:mm:ss');
+                const formData = new FormData()
+                formData.set("creatorId", sessionStorage.getItem('id'))
+                formData.set("content", this.content)
+                formData.set("date_creation", date)
+                formData.set("threadId", this.$route.params.threadId)
+                formData.set("image", this.media)
+                if(isFirstPost) formData.set("is_first_post", true)
+                if(isAnswer) formData.set("answer_to", isAnswer)
+                http.post(`/posts/`, formData)
+                .then(() => {
+                    this.$emit('creation_done', false)
+                })
             }
-            let date = moment().format('YYYY-MM-DD h:mm:ss');
-            const formData = new FormData()
-            formData.set("creatorId", sessionStorage.getItem('id'))
-            formData.set("content", this.content)
-            formData.set("date_creation", date)
-            formData.set("threadId", this.$route.params.threadId)
-            formData.set("image", this.media)
-            if(isFirstPost) formData.set("is_first_post", true)
-            if(isAnswer) formData.set("answer_to", isAnswer)
-            http.post(`/posts/`, formData)
-            .then(() => {
-                this.$emit('creation_done', false)
-            })
-            
         },
     },
     beforeMount(){

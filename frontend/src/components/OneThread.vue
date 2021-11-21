@@ -35,7 +35,9 @@
                             <div v-else class="text_post">
                                 {{ post.content }}
                             </div>
-                            <img class="" :src="post.media" alt="image du message" v-if="post.media !== ''">
+                            <div v-if="post.media">
+                                <img class="" :src="post.media" alt="image du message" v-if="post.media !== ''">
+                            </div>
                         </div>
                     </div>
                     <div class="butn-group">

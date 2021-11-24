@@ -2,6 +2,7 @@
 ```
 npm install
 ```
+### REQUIRE MYSQL DB
 ### Follow env-example in backend folder.
 
 ### Launch frontend in frontend folder

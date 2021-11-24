@@ -1,1 +1,3 @@
 SECRET_KEY=*string_of_your_choice*
+DATABASE = *name_of_database*
+DB_PASSWORD = *password_for_root_user*

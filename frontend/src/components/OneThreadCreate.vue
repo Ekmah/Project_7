@@ -44,7 +44,7 @@ export default {
         },
         CreateThread(){
             if (this.subject!="" && this.content != ""){
-                let date = moment().format('YYYY-MM-DD hh:mm:ss');
+                let date = moment().format('YYYY-MM-DD HH:mm:ss');
                 console.log(date)
                 let payload = {
                     "thread":

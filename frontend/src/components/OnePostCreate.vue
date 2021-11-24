@@ -48,7 +48,7 @@ export default {
                 } else {
                     isAnswer = false
                 }
-                let date = moment().format('YYYY-MM-DD hh:mm:ss');
+                let date = moment().format('YYYY-MM-DD HH:mm:ss');
                 console.log(date)
                 const formData = new FormData()
                 formData.set("creatorId", sessionStorage.getItem('id'))

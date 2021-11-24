@@ -22,7 +22,7 @@
                         <div class="user">{{ post.username}}</div>
                         <div class="content">
                             <small class="small">#{{post.postId}} | <span v-if="post.answer_to" >answer to post #{{ post.answer_to }} </span>
-                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY, h:mm:ss a")}}</small>
+                            sent the {{ post.postDateCreation | moment("dddd, MMMM Do YYYY, HH:mm:ss")}}</small>
                             <hr style="margin: 0px 0px 1rem 0px;">
                             <div v-if="post_edit">
                                 <div v-if="post_id == post.postId">

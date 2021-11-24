@@ -113,7 +113,7 @@ exports.modifyPost = (req, res, next) => {
                 }
               }
             }
-            console.log(quer, resp[0])
+            console.log(quer, resp[0]) 
             con.query(
               `UPDATE post SET ${quer} Where id = ?`, req.params.postId, (err, resp) => {
                 if (err){res.status(400).json({ err })}

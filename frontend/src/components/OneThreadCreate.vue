@@ -11,7 +11,7 @@
                 <label for="subject">Content of your initial post:</label> 
                 <div class="content_create">
                     <textarea class="form-control col-12 text_area" id="content" name="content" v-model="content"></textarea>
-                    <input type="file" id="avatar" class="btn" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg">
+                    <input type="file" id="avatar" class="btn" name="media" v-on:change="selectedFile($event)" accept="image/png, image/jpeg, image/gif">
                 </div>
             </div>
         </div>

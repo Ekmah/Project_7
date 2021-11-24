@@ -12,7 +12,7 @@
       </ul>
       
     </div>
-    <img class="logo" alt="Vue logo" src="../../src/assets/logo.png">
+    <img class="logo" alt="Groupomania logo" src="../../src/assets/logo.png">
     
   </div>
 </template>

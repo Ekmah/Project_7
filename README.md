@@ -1,9 +1,9 @@
 ## Project setup to do IN EACH FOLDER
 ```
 dependencies backend/frontend:
-    -node v14.15.4 (globally installed: npm -g install node@14.15.4)
-    -MySQL VERSION(): 8.0.26, 
-    -nodemon v2.0.15 (globally installed: npm -g install nodemon@2.0.15)
+    -both: node v14.15.4 (globally installed: npm -g install node@14.15.4)
+    -backend: MySQL VERSION(): 8.0.26, 
+    -backend: nodemon v2.0.15 (globally installed: npm -g install nodemon@2.0.15)
 
 execute inside folder the following command:
 npm install

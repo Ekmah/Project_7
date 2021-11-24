@@ -168,7 +168,7 @@ export default {
         white-space: nowrap;
         overflow: hidden;
     }
-    @media (min-width: 540px) {
+    @media (min-width: 570px) {
         .post-body{
             width:48% !important;
             flex: 0 0 auto !important;
@@ -181,7 +181,7 @@ export default {
             flex: 0 0 auto !important;
         }
     }
-    @media (min-width:1021px) {
+    @media (min-width:1060px) {
         .post-body{
             max-height:130px !important;
             width:19% !important;

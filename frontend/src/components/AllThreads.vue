@@ -4,7 +4,7 @@
             <button class="btn btn-success" type="button" @click="Create()">Create new Thread</button>
             <h2>The 10 latest posts:</h2>
             <li class="post_home">
-                <div class="post-body col-12" v-for="post in posts" :key="post.postId">
+                <div class="post-body" v-for="post in posts" :key="post.postId">
                     <div class="inner-post">
                         <div v-if="post.media">
                             <img class="image" :src="post.media" alt="image du message" >
@@ -126,6 +126,7 @@ export default {
         overflow: hidden;
     }
     .post-body {
+        width:98%;
         max-height:110px;
         text-align: left ; 
         background-color: rgb(160, 255, 160) ; 
@@ -174,12 +175,14 @@ export default {
     }
     @media (min-width: 768px) {
         .post-body{
+            max-height:130px !important;
             width:30% !important;
             flex: 0 0 auto !important;
         }
     }
     @media (min-width:1021px) {
         .post-body{
+            max-height:130px !important;
             width:19% !important;
             flex: 0 0 auto !important;
         }

@@ -153,14 +153,22 @@ exports.deletePost = (req, res, next) => {
   con.query('SELECT * FROM post WHERE id=?', req.params.postId, (err, resp) => {
     console.log("post:", resp)
     if (req.params.userId == resp[0].creatorId || req.params.role == "modo") {
-      const filename = resp[0].media.split('/images/')[1];
-      fs.unlink(`images/${filename}`, () =>{
+      if (resp[0].media) {
+        const filename = resp[0].media.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () =>{
+          con.query('DELETE FROM post WHERE id=?', req.params.postId, (err, resp) => {
+            console.log(resp)
+            if (err){res.status(400).json({err})}
+            else {res.status(200).json({ message: 'Objet supprimé !'})}
+          })
+        })
+      } else {
         con.query('DELETE FROM post WHERE id=?', req.params.postId, (err, resp) => {
           console.log(resp)
           if (err){res.status(400).json({err})}
           else {res.status(200).json({ message: 'Objet supprimé !'})}
         })
-      })
+      } 
     } else {
       res.status(400).json({message: "You are neither the creator or the moderator of this post."})
     }

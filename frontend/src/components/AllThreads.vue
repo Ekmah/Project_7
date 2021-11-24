@@ -140,6 +140,7 @@ export default {
         flex-wrap: wrap;
         flex-direction: column ;
         max-width:80%;
+        margin-left: 5px;
     }
     .thread-body-header {
         display:flex ;

@@ -17,7 +17,7 @@ Dump folder created using the data export function of MySQL workbench  which is 
 (tutorial for  MySQL workbench users; when the DB is created, go to Server -> Data Import -> select the Dump folder using the 'Import from the Dump Project Folder' option, then go to the 'Import Progress' tab of the Data Import and click on 'Start Import'.)
 If you want a modo, you will need to create yourself a modo user by creating a user with the value for the 'type' field being 'modo'.
 The project should work without, however.
-
+NOTE: if you can't use those .sql files and need to setup the bdd by hand, you can open the .sql files with any text editor: all the SQL commands are inside.
 ```
 ### Follow env-example in backend folder for the .env creation. 
 ```

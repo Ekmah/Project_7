@@ -34,6 +34,7 @@ npm run serve
 ### Launch backend in backend folder
 ```
 nodemon server
+NOTE: if you have a problem with the connection to MySQL because you use the new authentication method, try to go inside the db_connection file in the backend folder and replace 'require('mysql');' by 'require('mysql2');', mysql2 support the new 'caching_sha2_password' method, and should have already been installed.
 ```
 ### The Porject should be operational now.
 ```

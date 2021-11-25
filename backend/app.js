@@ -11,7 +11,7 @@ const postsRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 
 const mysql = require('mysql');
-const connection = require('./db_connection')
+const con = require('./db_connection')
 
 app.use(helmet());
 app.use((req, res, next) => {

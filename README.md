@@ -22,7 +22,10 @@ NOTE: if you can't use those .sql files and need to setup the bdd by hand, you c
 ```
 The .env should be created in the same folder as the env-example.
 ```
-
+### Create images folder inside the backend folder
+```
+to give a place for uploaded images to resides
+```
 ### Launch frontend in frontend folder
 ```
 npm run serve

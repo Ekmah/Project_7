@@ -13,7 +13,7 @@ const userRoutes = require('./routes/user');
 const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
+  user: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASSWORD}`,
   database: `${process.env.DATABASE}`
 });

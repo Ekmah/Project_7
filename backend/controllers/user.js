@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const mysql = require('mysql');
-const con = require('./db_connection')
+const con = require('../db_connection')
 
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)

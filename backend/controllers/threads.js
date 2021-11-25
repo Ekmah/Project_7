@@ -1,12 +1,7 @@
 const fs = require('fs');
 
 const mysql = require('mysql');
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'dactylographierais',
-  database: 'p7'
-});
+const connection = require('./db_connection')
   
 exports.createThread = (req, res, next) => {
   const threadObject = req.body.thread;

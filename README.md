@@ -9,11 +9,10 @@ execute inside folder the following command:
 npm install
 
 ```
-### REQUIRE MYSQL DB (host is localhost, user is root user)
+### REQUIRE MYSQL DB (host is localhost)
 ```
-You will need the database name and root password for the .env later.
-You will need to create a SQL Database with the host being the localhost and the user being root. Then import the DB using the
-Dump folder created using the data export function of MySQL workbench  which is inside the mysqldbexport folder. It contains 3 .sql files, 1 for each table.
+You will need the database name and user name and password for the .env later.
+You will need to create a SQL Database with the host being the localhost. Then import the DB using the Dump folder created using the data export function of MySQL workbench  which is inside the mysqldbexport folder. It contains 3 .sql files, 1 for each table.
 (tutorial for  MySQL workbench users; when the DB is created, go to Server -> Data Import -> select the Dump folder using the 'Import from the Dump Project Folder' option, then go to the 'Import Progress' tab of the Data Import and click on 'Start Import'.)
 If you want a modo, you will need to create yourself a modo user by creating a user with the value for the 'type' field being 'modo'.
 The project should work without, however.

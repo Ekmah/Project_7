@@ -11,16 +11,7 @@ const postsRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 
 const mysql = require('mysql');
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: `${process.env.DB_USER}`,
-  password: `${process.env.DB_PASSWORD}`,
-  database: `${process.env.DATABASE}`
-});
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected!');
-});
+const connection = require('./db_connection')
 
 app.use(helmet());
 app.use((req, res, next) => {

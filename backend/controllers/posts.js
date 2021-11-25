@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const mysql = require('mysql');
-const connection = require('./db_connection')
+const con = require('./db_connection')
 
 exports.createPost = (req, res, next) => {
   const postObject = req.body;
